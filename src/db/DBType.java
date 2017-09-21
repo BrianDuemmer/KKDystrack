@@ -8,6 +8,7 @@ package db;
 public enum DBType 
 {
 	INTEGER("INTEGER"), 
+	BIGINT("BIGINT"),
 	REAL("REAL"), 
 	TEXT("TEXT"), 
 	BLOB("BLOB"),

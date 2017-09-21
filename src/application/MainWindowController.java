@@ -596,7 +596,7 @@ public class MainWindowController
 
 
 
-		System.out.println("Initializing primary controller...");
+		System.out.println("Initializing Dystrack...");
 
 		
 		// Add listeners to the control properties that need them
@@ -645,15 +645,19 @@ public class MainWindowController
 
 		// Initialize the tableViews
 		initQueueTable();
-		readQueueToTable();
+		
+		Thread t = new Thread(() -> { readQueueToTable(); });
+		t.setDaemon(true);
+		t.setName("Initial_queue_read");
+		t.start();
+		
 
 		// Initialize the update services 
-		DysMain.UIUpdateService.scheduleAtFixedRate(uiUpdateTask, 1000, DysMain.UIUpdateMillis, TimeUnit.MILLISECONDS); // Run immediately, 1.5 seconds between each update
+		// DysMain.UIUpdateService.scheduleAtFixedRate(uiUpdateTask, 1000, DysMain.UIUpdateMillis, TimeUnit.MILLISECONDS); // Run immediately, 1.5 seconds between each update
 
 		// Init the main controller / foobar interfaces
 		DysMain.rc = new RequestControl();
 		DysMain.foobar = new Foobar(DysMain.foobarPath);
-		RCTables.queueHistoryTable.verifyExists(DysMain.remoteDB.getDb());
 		
 		// Init the server
 		try { 

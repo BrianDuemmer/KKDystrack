@@ -391,7 +391,7 @@ public abstract class DatabaseIO
 		{
 			RCTables.paramTable.verifyExists(db);
 			String sql1 = "DELETE FROM " +RCTables.paramTable.getName()+ " WHERE setting=?";
-			String sql2 = "INSERT OR REPLACE INTO " +RCTables.paramTable.getName()+ " VALUES( ?, ?, ?)";
+			String sql2 = "INSERT INTO " +RCTables.paramTable.getName()+ " VALUES( ?, ?, ?)";
 
 			try
 			{
