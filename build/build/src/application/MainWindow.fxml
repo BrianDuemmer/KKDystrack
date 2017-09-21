@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="948.0" prefWidth="1420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+   <children>
+      <BorderPane prefHeight="948.0" prefWidth="1420.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <BorderPane prefHeight="88.0" prefWidth="93.0" BorderPane.alignment="CENTER">
+               <center>
+                  <TabPane fx:id="tabPage" prefHeight="600.0" prefWidth="1236.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                    <tabs>
+                      <Tab fx:id="overviewPage" text="Overview">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <BorderPane prefHeight="637.0" prefWidth="1236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <left>
+                                          <SplitPane dividerPositions="0.04461538461538461, 0.6984615384615385, 0.7538461538461538" orientation="VERTICAL" prefHeight="512.0" prefWidth="314.0" BorderPane.alignment="CENTER">
+                                            <items>
+                                                <AnchorPane prefHeight="182.0" prefWidth="312.0" SplitPane.resizableWithParent="false">
+                                                   <children>
+                                                      <Label alignment="CENTER" layoutX="128.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="24.0" prefWidth="312.0" text="Configuration Parameters" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="288.0">
+                                                   <children>
+                                                      <SplitPane dividerPositions="0.4950166112956811" prefHeight="281.0" prefWidth="312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <items>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox layoutY="120.0" prefHeight="595.0" prefWidth="147.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <Label maxWidth="1.7976931348623157E308" text="Percent Random" textAlignment="CENTER">
+                                                                           <VBox.margin>
+                                                                              <Insets />
+                                                                           </VBox.margin>
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" text="Queue Open Mins" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="47.0" maxWidth="1.7976931348623157E308" text="Queue Close Mins" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="74.0" maxWidth="1.7976931348623157E308" text="Std. Song Cooldown" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="91.0" maxWidth="1.7976931348623157E308" text="Std. User Cooldown" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="101.0" maxWidth="1.7976931348623157E308" text="Global Cost Scl." textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="145.0" maxWidth="1.7976931348623157E308" text="Base Song Price / min" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="172.0" maxWidth="1.7976931348623157E308" text="Base History Expire mins" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                           <tooltip>
+                                                                              <Tooltip text="Any history elements older than this will have no effect on cost (excluding same ime of day)" />
+                                                                           </tooltip>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="199.0" maxWidth="1.7976931348623157E308" text="Base Immediate Replay scl." textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="226.0" maxWidth="1.7976931348623157E308" text="Playlist Root" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="253.0" maxWidth="1.7976931348623157E308" text="Skip Song Time" textAlignment="CENTER">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox layoutX="14.0" layoutY="240.0" prefHeight="567.0" prefWidth="151.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <Slider fx:id="percentRandomSlider" blockIncrement="0.1" max="1.0">
+                                                                           <padding>
+                                                                              <Insets bottom="8.0" left="5.0" right="5.0" top="6.0" />
+                                                                           </padding>
+                                                                        </Slider>
+                                                                        <TextField fx:id="queueOpenMinsEntry" onAction="#queueOpenMinsOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="queueCloseMinsEntry" layoutX="10.0" layoutY="44.0" onAction="#queueCloseMinsOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="2.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="stdSongCooldownEntry" layoutX="15.0" layoutY="66.0" onAction="#stdSongCooldownOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="2.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="stdUserCooldownEntry" layoutX="15.0" layoutY="94.0" onAction="#stdUserCooldownOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="2.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="globalCostSclEntry" layoutX="10.0" layoutY="119.0" onAction="#globalCostSclOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="2.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="baseSongPriceMinEntry" layoutX="10.0" layoutY="144.0" onAction="#baseSongPriceMinOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="2.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="baseHistoryExpireMinsEntry" layoutX="15.0" layoutY="173.0" onAction="#baseHistoryExpireMinsOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="3.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="baseImmediateReplaySclEntry" layoutX="15.0" layoutY="201.0" onAction="#baseImmediateReplaySclOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="3.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="playlistRootEntry" layoutX="15.0" layoutY="229.0" onAction="#playlistRootOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="3.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="skipSongTimeEntry" layoutX="15.0" layoutY="257.0" onAction="#skipSongTimeEntryOnAction" prefHeight="25.0" prefWidth="102.0">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" right="5.0" top="3.0" />
+                                                                           </VBox.margin>
+                                                                        </TextField>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </items>
+                                                      </SplitPane>
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="192.0" prefWidth="312.0" SplitPane.resizableWithParent="false">
+                                                   <children>
+                                                      <Label layoutX="136.0" layoutY="5.0" text="Control" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                   <children>
+                                                      <SplitPane dividerPositions="0.4870967741935484" layoutX="45.0" layoutY="38.0" prefHeight="248.0" prefWidth="312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <items>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox layoutX="14.0" layoutY="32.0" prefHeight="246.0" prefWidth="148.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <Label maxWidth="1.7976931348623157E308" text="Requests">
+                                                                           <VBox.margin>
+                                                                              <Insets />
+                                                                           </VBox.margin>
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="15.0" layoutY="15.0" maxWidth="1.7976931348623157E308" text="Free Requests">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="37.0" maxWidth="1.7976931348623157E308" text="Ignore history?">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                        <Label layoutX="10.0" layoutY="64.0" maxWidth="1.7976931348623157E308" text="Don't Record to History?">
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </padding>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox layoutX="28.0" layoutY="23.0" prefHeight="246.0" prefWidth="156.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <HBox prefHeight="18.0" prefWidth="156.0">
+                                                                           <children>
+                                                                              <CheckBox fx:id="requestsAutoBox" mnemonicParsing="false" onAction="#requestsAutoBoxOnAction" selected="true" text="Auto">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="5.0" top="6.0" />
+                                                                                 </HBox.margin>
+                                                                              </CheckBox>
+                                                                              <ToggleButton fx:id="requestManualBtn" disable="true" mnemonicParsing="false" onAction="#requestManualBtnOnAction" text="Closed">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="8.0" top="2.0" />
+                                                                                 </HBox.margin>
+                                                                                 <toggleGroup>
+                                                                                    <ToggleGroup fx:id="reqManualControl" />
+                                                                                 </toggleGroup>
+                                                                              </ToggleButton>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <CheckBox fx:id="freeRequestsBox" mnemonicParsing="false" onAction="#freeRequestsBoxOnAction">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" top="6.0" />
+                                                                           </VBox.margin>
+                                                                        </CheckBox>
+                                                                        <CheckBox fx:id="ignoreHistoryBox" layoutX="15.0" layoutY="68.0" mnemonicParsing="false" onAction="#ignoreHistoryBoxOnAction">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" top="9.0" />
+                                                                           </VBox.margin>
+                                                                        </CheckBox>
+                                                                        <CheckBox fx:id="dontRecordHistoryBox" layoutX="15.0" layoutY="70.0" mnemonicParsing="false" onAction="#dontRecordHistoryBoxOnAction">
+                                                                           <VBox.margin>
+                                                                              <Insets left="5.0" top="9.0" />
+                                                                           </VBox.margin>
+                                                                        </CheckBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </items>
+                                                      </SplitPane>
+                                                   </children>
+                                                </AnchorPane>
+                                            </items>
+                                          </SplitPane>
+                                       </left>
+                                       <top>
+                                          <ToolBar prefHeight="37.0" prefWidth="1236.0" BorderPane.alignment="CENTER">
+                                             <items>
+                                                <Button fx:id="addSongBtn" mnemonicParsing="false" onAction="#addSongManual" text="Add..." />
+                                                <Button fx:id="addRandomBtn" mnemonicParsing="false" onAction="#addSongRandom" text="Add Random" />
+                                                <Button fx:id="resetFoobarBtn" mnemonicParsing="false" onAction="#resetFoobarOnAction" text="Start / Reset Foobar" />
+                                                <ToggleButton fx:id="foobarPlayStatusBtn" mnemonicParsing="false" onAction="#foobarPlayStatusBtnOnAction" text="Play Foobar" />
+                                                <Button fx:id="skipSongBtn" mnemonicParsing="false" onAction="#skipSongBtnOnAction" text="Skip Song" />
+                                             </items>
+                                          </ToolBar>
+                                       </top>
+                                       <right>
+                                          <SplitPane dividerPositions="0.04477611940298507" orientation="VERTICAL" prefHeight="600.0" prefWidth="302.0" BorderPane.alignment="CENTER">
+                                            <items>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+                                                   <children>
+                                                      <Label alignment="CENTER" layoutX="126.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="300.0" text="Variables" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="300.0">
+                                                   <children>
+                                                      <SplitPane dividerPositions="0.5" layoutX="50.0" layoutY="346.0" prefHeight="637.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <items>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox prefHeight="635.0" prefWidth="146.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <Label maxWidth="1.7976931348623157E308" text="Request Session % Full">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <Label layoutX="15.0" layoutY="15.0" maxWidth="1.7976931348623157E308" text="Queue Size">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <Label layoutX="15.0" layoutY="42.0" maxWidth="1.7976931348623157E308" text="Queue Length">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <Label layoutX="15.0" layoutY="69.0" maxWidth="1.7976931348623157E308" text="Queue Open?">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <Label layoutX="15.0" layoutY="96.0" maxWidth="1.7976931348623157E308" text="Foobar Open?">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox prefHeight="635.0" prefWidth="146.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <ProgressBar fx:id="requestSessionPctFullBar" prefWidth="200.0" progress="1.0">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="3.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </ProgressBar>
+                                                                        <Label fx:id="queueSizeLabel" text="Label">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <Label fx:id="queueLengthLabel" layoutX="15.0" layoutY="42.0" text="Label">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </Label>
+                                                                        <CheckBox fx:id="queueOpenBox" disable="true" mnemonicParsing="false">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="6.0" left="5.0" top="4.0" />
+                                                                           </VBox.margin>
+                                                                        </CheckBox>
+                                                                        <CheckBox fx:id="foobarOpenBox" disable="true" layoutX="15.0" layoutY="94.0" mnemonicParsing="false">
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                                                                           </VBox.margin>
+                                                                        </CheckBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </items>
+                                                      </SplitPane>
+                                                   </children>
+                                                </AnchorPane>
+                                            </items>
+                                          </SplitPane>
+                                       </right>
+                                       <center>
+                                          <SplitPane dividerPositions="0.04461538461538461" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                                            <items>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="802.0" SplitPane.resizableWithParent="false">
+                                                   <children>
+                                                      <Label alignment="CENTER" layoutX="125.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="802.0" text="Current Queue" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <TableView fx:id="currentQueue" prefHeight="568.0" prefWidth="618.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <columns>
+                                                          <TableColumn fx:id="currentQueueNameCol" prefWidth="131.0" sortable="false" text="Name" />
+                                                          <TableColumn fx:id="currentQueueOSTCol" minWidth="0.0" prefWidth="61.0" sortable="false" text="OST" />
+                                                            <TableColumn fx:id="currentQueueUsernameCol" prefWidth="130.0" sortable="false" text="Username" />
+                                                            <TableColumn fx:id="currentQueueUserIDCol" prefWidth="102.0" sortable="false" text="User ID" />
+                                                            <TableColumn fx:id="currentQueuePriorityCol" minWidth="2.0" prefWidth="85.0" sortable="false" text="Priority" />
+                                                            <TableColumn fx:id="currentQueueTimeRequestedCol" prefWidth="91.0" sortable="false" text="Time Requested" />
+                                                            <TableColumn fx:id="currentQueueLengthCol" prefWidth="86.0" sortable="false" text="Length" />
+                                                            <TableColumn fx:id="currentQueueRatingCol" prefWidth="114.0" sortable="false" text="Rating" />
+                                                        </columns>
+                                                         <contextMenu>
+                                                            <ContextMenu>
+                                                              <items>
+                                                                  <MenuItem fx:id="queueTableMenuRemoveSong" mnemonicParsing="false" onAction="#queueTableMenuRemoveSongOnAction" text="Remove Song" />
+                                                              </items>
+                                                            </ContextMenu>
+                                                         </contextMenu>
+                                                      </TableView>
+                                                   </children>
+                                                </AnchorPane>
+                                            </items>
+                                          </SplitPane>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab fx:id="databasePage" text="Database Administration">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <WebView fx:id="databaseWebView" prefHeight="672.0" prefWidth="1236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab fx:id="songOverridePage" text="Individual Song Overrides">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="songOverrideTable" prefHeight="637.0" prefWidth="1236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="songOverrideSongNameCol" prefWidth="308.0" text="Song Name" />
+                                        <TableColumn fx:id="songOverrideOwningOSTCol" minWidth="0.0" prefWidth="235.0" text="Owning OST" />
+                                          <TableColumn fx:id="songOverrideBaseCostCol" prefWidth="104.0" text="Base Cost" />
+                                          <TableColumn fx:id="songOverrideHistoryExpireMinsCol" prefWidth="145.0" text="History Expire Mins." />
+                                          <TableColumn fx:id="songOverrideImmediateRelaySclCol" prefWidth="158.0" text="Immediate Replay Scl." />
+                                      </columns>
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Add Song" />
+                                                <MenuItem mnemonicParsing="false" text="Remove Song" />
+                                                <MenuItem mnemonicParsing="false" text="Edit Song" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab fx:id="userBlacklistPage" text="User Blacklist">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="userBlacklistTable" layoutX="176.0" layoutY="164.0" prefHeight="709.0" prefWidth="1420.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="userBlacklistUsernameCol" prefWidth="282.0" text="Username" />
+                                        <TableColumn fx:id="userBlacklistUserIDCol" minWidth="0.0" prefWidth="219.0" text="User ID" />
+                                          <TableColumn fx:id="userBlacklistTimeBannedCol" prefWidth="89.0" text="Time Banned" />
+                                          <TableColumn fx:id="userBlacklistNoteCol" prefWidth="829.0" text="Note" />
+                                      </columns>
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                                <MenuItem mnemonicParsing="false" text="Edit user" />
+                                              <MenuItem mnemonicParsing="false" text="Add User" />
+                                                <MenuItem mnemonicParsing="false" text="Remove User" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab fx:id="vipUsersPage" text="VIP Users">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="vipUsersTable" layoutX="176.0" layoutY="164.0" prefHeight="709.0" prefWidth="1420.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columns>
+                                          <TableColumn fx:id="vipUsersUsernameCol" prefWidth="282.0" text="Username" />
+                                          <TableColumn fx:id="vipUsersUserIDCol" minWidth="0.0" prefWidth="219.0" text="User ID" />
+                                          <TableColumn fx:id="vipUsersCostSclCol" prefWidth="89.0" text="Cost Scalar" />
+                                          <TableColumn fx:id="vipUsersNoteCol" prefWidth="829.0" text="Note" />
+                                       </columns>
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Add User" />
+                                                <MenuItem mnemonicParsing="false" text="Remove User" />
+                                                <MenuItem mnemonicParsing="false" text="Edit User" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </center>
+               <bottom>
+                  <BorderPane prefHeight="185.0" prefWidth="1236.0" BorderPane.alignment="CENTER">
+                     <top>
+                        <SplitPane dividerPositions="0.5" prefHeight="33.0" prefWidth="1236.0" BorderPane.alignment="CENTER">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="36.0" prefWidth="445.0">
+                                 <children>
+                                    <HBox prefHeight="36.0" prefWidth="613.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="68.0" text="Output Log">
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Button fx:id="viewSysoLogBtn" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#viewSysoLogOnAction" prefHeight="30.0" prefWidth="100.0" text="View Log File">
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </Button>
+                                          <Button fx:id="clearSysoConsoleBtn" mnemonicParsing="false" onAction="#clearSysoLogConsoleBtnOnAction" prefHeight="30.0" prefWidth="88.0" text="Clear Console">
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox prefHeight="36.0" prefWidth="613.0">
+                                       <children>
+                                          <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="55.0" text="Error Log">
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Button fx:id="viewSyserrLogBtn" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#viewSyserrLogOnAction" prefHeight="30.0" prefWidth="100.0" text="View Log File">
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </Button>
+                                          <Button fx:id="clearSyserrConsoleBtn" mnemonicParsing="false" onAction="#clearSyserrConsoleBtnOnAction" prefHeight="30.0" text="Clear Console">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </top>
+                     <center>
+                        <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TextArea fx:id="sysoLogTxtbox" editable="false" prefHeight="150.0" prefWidth="614.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TextArea fx:id="syserrLogTxtbox" editable="false" prefHeight="150.0" prefWidth="614.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </center>
+                  </BorderPane>
+               </bottom>
+               <top>
+                  <Label fx:id="nowPlayingLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Now Playing" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </top>
+            </BorderPane>
+         </center>
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#exportQueue" text="Export Queue" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveParams" text="Save Params" />
+                        <MenuItem mnemonicParsing="false" onAction="#revertParams" text="Load Params" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Playlist">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#regenPlaylist" text="Regenerate Playlist" />
+                        <MenuItem mnemonicParsing="false" onAction="#cleanPlaylist" text="Clean Playlist Build" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteForwardQueue" text="Delete Queue" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="About">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showCredits" text="Credits" />
+                     </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="169.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SongEntryPopupController">
+   <children>
+      <SplitPane dividerPositions="0.7664670658682635" orientation="VERTICAL" prefHeight="402.0" prefWidth="356.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <SplitPane dividerPositions="0.19506726457399104" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="358.0" prefWidth="79.0">
+                           <children>
+                              <VBox prefHeight="341.0" prefWidth="102.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label text="Song Name">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" top="9.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label layoutX="15.0" layoutY="19.0" text="Song OST">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" top="9.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label layoutX="15.0" layoutY="50.0" text="Priority">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" top="9.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <VBox prefHeight="341.0" prefWidth="244.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TextField fx:id="songNameEntry">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="songOstEntry" layoutX="15.0" layoutY="15.0">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="priorityEntry" layoutX="15.0" layoutY="45.0" onAction="#priorityOnAction" text="0">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="31.0" prefWidth="354.0">
+               <children>
+                  <HBox layoutX="39.0" layoutY="-36.0" prefHeight="51.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button fx:id="addToQueueBtn" mnemonicParsing="false" onAction="#addToQueueAction" text="Add to queue">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="selectSongFileBtn" mnemonicParsing="false" onAction="#selectSongFileOnAction" text="Select song file...">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelHit" text="Cancel">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

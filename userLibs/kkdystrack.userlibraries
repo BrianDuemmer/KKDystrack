@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<eclipse-userlibraries version="2">
+    <library name="jid3lib" systemlibrary="false">
+        <archive path="C:/lib/jid3lib-0.5.4/jid3lib-0.5.4.jar" source="C:/lib/jid3lib-0.5.4/src"/>
+    </library>
+    <library name="mp3spi" systemlibrary="false">
+        <archive javadoc="file:/C:/lib/MpegAudioSPI1.9.5/doc/" path="C:/lib/MpegAudioSPI1.9.5/mp3spi1.9.5.jar" source="C:/lib/MpegAudioSPI1.9.5/src"/>
+        <archive path="C:/lib/tritonus_share-0.3.6.jar"/>
+        <archive javadoc="file:/C:/lib/JLayer1.0.1/doc/" path="C:/lib/JLayer1.0.1/jl1.0.1.jar" source="C:/lib/JLayer1.0.1/src"/>
+    </library>
+    <library name="nanohttpd" systemlibrary="false">
+        <archive path="C:/lib/nanohttpd-2.3.1/nanohttpd-webserver-2.1.1.jar"/>
+    </library>
+    <library name="sqlite-jdbc" systemlibrary="false">
+        <archive path="C:/lib/sqlite-jdbc-3.20.0.jar"/>
+    </library>
+</eclipse-userlibraries>
