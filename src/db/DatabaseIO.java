@@ -13,6 +13,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.sqlite.SQLiteErrorCode;
 
@@ -78,10 +80,10 @@ public abstract class DatabaseIO
 			}
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * Attempts to connect to the database specified by <code>url</code>
 	 * @return The reference to the database we connected to, or null if the connection is invalid
@@ -147,7 +149,7 @@ public abstract class DatabaseIO
 						throw e;
 				}
 			} while(isBusy);
-			
+
 			return res;
 		}
 	}
@@ -189,7 +191,7 @@ public abstract class DatabaseIO
 						res = ps.getResultSet();
 						ps.closeOnCompletion();
 					}
-					
+
 					else // no resultset needed, so close it
 						ps.close();
 
@@ -265,11 +267,11 @@ public abstract class DatabaseIO
 			String colName = "num_val";
 			if(asString)
 				colName = "str_val";
-			
-			
+
+
 			// Will return the default value of either a string or a number (depending on asString parameter) on failure
 			Object val = asString  ?  "" : new Double(0); 
-			
+
 			// Use a prepared Statement for added security
 			RCTables.paramTable.verifyExists(db);
 			String sql = "SELECT " +colName+ " FROM " +RCTables.paramTable.getName()+ " WHERE setting = ?";
@@ -391,9 +393,9 @@ public abstract class DatabaseIO
 	 * @return true if the parameter was created, false otherwise 
 	 */
 	public void writeParam(String key, String val) { writeRawParam(key, val, 0); }
-	
-	
-	
+
+
+
 	/**
 	 * Writes a raw parameter to the database
 	 */
@@ -405,25 +407,25 @@ public abstract class DatabaseIO
 				// Verify the database is ready for writing parameters
 				verifyConnected();
 				RCTables.paramTable.verifyExists(db);
-				
+
 				// format statement to make sure a fresh key value pair goes in the DB
 				String sql = "REPLACE INTO " +RCTables.paramTable.getName()+ " VALUES (?, ?, ?);";
-				
+
 				PreparedStatement ps = db.prepareStatement(sql);
-				
+
 				// add parameters
 				ps.setString(1, key);
 				ps.setDouble(2, valN);
 				ps.setString(3, valS);
-				
+
 				System.out.println(sql);
-				
+
 				execRaw(ps);
 				ps.close();
 			} catch (SQLException e) {
 				System.err.println("SQL Error writing key!");
 				System.err.println(e.getMessage());
-//				e.printStackTrace();
+				//				e.printStackTrace();
 			}
 		}
 	}
@@ -456,10 +458,10 @@ public abstract class DatabaseIO
 	{
 		ReqMode r = ReqMode.CLOSED;
 		String mode = readStringParam("requestMode");
-		
+
 		try {r = ReqMode.valueOf(mode); }
 		catch(Exception e) {System.err.println("error reading request mode"); }
-		
+
 		return r;
 	}
 
@@ -487,22 +489,22 @@ public abstract class DatabaseIO
 
 		return size;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public void dumpTableToCSV(String path, DBTable table)
 	{	
 		try {
 			// Setup files
 			Files.deleteIfExists(new File(path).toPath());
-			
+
 			Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path)));
-			
+
 			ArrayList<String> cols = new ArrayList<String>();
 			ResultSet rs = execRaw("SELECT * FROM " +table.getName()+ " WHERE 1=1;");
-			
+
 			// Get column names
 			int colCt = rs.getMetaData().getColumnCount();
 			for(int i=0; i<colCt; i++)
@@ -511,22 +513,96 @@ public abstract class DatabaseIO
 				w.write("\"" +cols.get(i)+"\"" +"\t");
 			}
 			w.write('\n');
-			
+
 			while(rs.next())
 			{
 				for(int j=0; j<colCt; j++)
 					w.write("\"" +rs.getString(j+1)+ "\"\t");
 				w.write('\n');
-					
+
 			}
-			
+
 			w.close();
-			
+
 			System.out.println("Finished Exporting table");
-				
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+
+
+	/**
+	 * Takes a table from this database, and transfers the specified table up to
+	 * the other database
+	 * @param other the other database to sync to
+	 * @param table the table that will be copied. NOTE: this will verify that the table exists in both databases
+	 * @param clean if true, will wipe the table before upsyncing. it goes without saying but 
+	 * USE THIS FEATURE CAREFULLY!
+	 */
+	public void upSync(DatabaseIO other, DBTable table, boolean clean)
+	{
+		// make sure the table exists here and in the remote
+		table.verifyExists(db);
+		table.verifyExists(other.getDb());
+
+
+		try {
+			ResultSet rs = execRaw("SELECT * FROM " +table.getName()+ ";");
+
+			// get columns, format SQL insert
+			String insSQL = "REPLACE INTO " +table.getName()+ " (";
+			String valSQL = " VALUES(";
+
+			int colCt = rs.getMetaData().getColumnCount();
+			List<String> colNames = new LinkedList<>();
+
+			if(colCt > 0 && rs.next()) {// if there aren't any columns, or there's no results there's nothing to copy
+
+				for(int i=1; i<= colCt; i++) { // add the column names, without a comma for the last one, and the '?'s for the VALUES body
+					String currName = rs.getMetaData().getColumnName(i);
+					colNames.add(currName);
+					insSQL += currName;
+					valSQL += "?";
+					
+					if(i != colCt) {
+						insSQL += ", ";
+						valSQL += ", ";
+					}
+				}
+				
+				// build the prepared statement
+				insSQL += ")" +valSQL+ ");";
+				PreparedStatement ps = other.getDb().prepareStatement(insSQL);
+
+				// add all of the values as a big fat batch statement
+				do {
+					for(int i=1; i<colCt; i++)
+						ps.setObject(i, rs.getObject(i));
+					ps.addBatch();
+					
+				} while(rs.next());
+				
+				//clean the table if necessary
+				if(clean)
+					execRaw("DELETE FROM " +table.getName());
+					
+				// upsync that statement
+				other.execRaw(ps);
+				
+				// close everything
+				ps.close();
+				rs.close();
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Error upsyncing to " +other.url);
+			e.printStackTrace();
+		}
+
+
 	}
 
 
