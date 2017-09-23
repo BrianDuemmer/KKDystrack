@@ -203,11 +203,11 @@ public class MainWindowController
 	@FXML private TextField playlistRootEntry;
 
 	@FXML private TextField skipSongTimeEntry;
-	
+
 	@FXML private MenuItem songOverrideAddSong;
-	
+
 	@FXML private MenuItem songOverrideRemoveSong;
-	
+
 	@FXML private MenuItem songOverrideEditSong;
 
 
@@ -332,19 +332,16 @@ public class MainWindowController
 		// only run if the value has actually changed
 		if( !playlistRootEntry.getText().equals(DysMain.remoteDB.readStringParam("playlistRoot")) )
 		{
-			try { 
-				DysMain.remoteDB.setParameter("playlistRoot", playlistRootEntry.getText()); 
-				Alert a = new Alert(
-						AlertType.CONFIRMATION, 
-						"Changing the playlist root normally requires cleanly rebuilding the playlist. Do this now?", 
-						ButtonType.YES, ButtonType.NO
-						);
-				Optional<ButtonType> b = a.showAndWait();
+			DysMain.remoteDB.writeParam("playlistRoot", playlistRootEntry.getText()); 
+			Alert a = new Alert(
+					AlertType.CONFIRMATION, 
+					"Changing the playlist root normally requires cleanly rebuilding the playlist. Do this now?", 
+					ButtonType.YES, ButtonType.NO
+					);
+			Optional<ButtonType> b = a.showAndWait();
 
-				if(b.isPresent() && b.get() == ButtonType.YES) // will run cleanPlaylist without an alert
-					cleanPlaylist(null);
-			} 
-			catch (SQLException e) { e.printStackTrace(); DysMain.databaseErrorAlert.showAndWait(); } 
+			if(b.isPresent() && b.get() == ButtonType.YES) // will run cleanPlaylist without an alert
+				cleanPlaylist(null);
 		}
 	}
 
@@ -598,7 +595,7 @@ public class MainWindowController
 
 		System.out.println("Initializing Dystrack...");
 
-		
+
 		// Add listeners to the control properties that need them
 		// manual request mode, have button text change based on whether or not it is selected
 		requestManualBtn.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -645,12 +642,12 @@ public class MainWindowController
 
 		// Initialize the tableViews
 		initQueueTable();
-		
+
 		Thread t = new Thread(() -> { readQueueToTable(); });
 		t.setDaemon(true);
 		t.setName("Initial_queue_read");
 		t.start();
-		
+
 
 		// Initialize the update services 
 		// DysMain.UIUpdateService.scheduleAtFixedRate(uiUpdateTask, 1000, DysMain.UIUpdateMillis, TimeUnit.MILLISECONDS); // Run immediately, 1.5 seconds between each update
@@ -658,7 +655,7 @@ public class MainWindowController
 		// Init the main controller / foobar interfaces
 		DysMain.rc = new RequestControl();
 		DysMain.foobar = new Foobar(DysMain.foobarPath);
-		
+
 		// Init the server
 		try { 
 			DysMain.server.start(); 
@@ -927,7 +924,7 @@ public class MainWindowController
 							freeRequestsBox.setSelected(freeReqests);
 							ignoreHistoryBox.setSelected(ignoreHistory);
 							dontRecordHistoryBox.setSelected(dontRecordHistory);
-							
+
 							// update other things
 							Foobar.skipSongTime = Double.parseDouble(sste);
 
@@ -985,15 +982,15 @@ public class MainWindowController
 			protected Void call() throws Exception
 			{
 				try {
-					DysMain.remoteDB.setParameter("percentRandom", prs);
-					DysMain.remoteDB.setParameter("queueOpenMins", qome);
-					DysMain.remoteDB.setParameter("queueCloseMins", qcme);
-					DysMain.remoteDB.setParameter("stdSongCooldown", ssce);
-					DysMain.remoteDB.setParameter("stdUserCooldown", suce);
-					DysMain.remoteDB.setParameter("globalCostScl", gcse);
-					DysMain.remoteDB.setParameter("baseSongPriceMin", bspme);
-					DysMain.remoteDB.setParameter("baseHistoryExpireMins", bheme);
-					DysMain.remoteDB.setParameter("baseImmediateReplayScl", birse);
+					DysMain.remoteDB.writeParam("percentRandom", prs);
+					DysMain.remoteDB.writeParam("queueOpenMins", qome);
+					DysMain.remoteDB.writeParam("queueCloseMins", qcme);
+					DysMain.remoteDB.writeParam("stdSongCooldown", ssce);
+					DysMain.remoteDB.writeParam("stdUserCooldown", suce);
+					DysMain.remoteDB.writeParam("globalCostScl", gcse);
+					DysMain.remoteDB.writeParam("baseSongPriceMin", bspme);
+					DysMain.remoteDB.writeParam("baseHistoryExpireMins", bheme);
+					DysMain.remoteDB.writeParam("baseImmediateReplayScl", birse);
 
 					System.out.println("Finished writing params");
 				} catch(Exception e) 
@@ -1234,13 +1231,7 @@ public class MainWindowController
 		percentRandomSlider.focusedProperty().addListener((arg0, oldVal, newVal) -> { 
 			if(oldVal.booleanValue())
 			{
-				Thread t = new Thread(() -> {
-					try { DysMain.remoteDB.setParameter("percentRandom", percentRandomSlider.getValue()); } 
-					catch (Exception e) {
-						e.printStackTrace();
-						DysMain.databaseErrorAlert.showAndWait();
-					}
-				});
+				Thread t = new Thread(() -> { DysMain.remoteDB.writeParam("percentRandom", percentRandomSlider.getValue()); });
 
 				t.setName("updatePercentRandom");
 				t.setDaemon(true);
@@ -1258,7 +1249,7 @@ public class MainWindowController
 	private void writeCheckboxToDB(CheckBox box, String name) {
 		Thread t = new Thread(() -> {
 			try {
-				DysMain.remoteDB.setParameter(name, box.isSelected());
+				DysMain.remoteDB.writeParam(name, box.isSelected());
 			} catch (Exception e) {
 				e.printStackTrace();
 				DysMain.databaseErrorAlert.showAndWait();

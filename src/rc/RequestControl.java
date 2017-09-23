@@ -152,12 +152,12 @@ public class RequestControl
 		
 //		 Write that stuff to the database
 		try {
-			DysMain.remoteDB.setParameter("queueLength", queueLength);
-			DysMain.remoteDB.setParameter("queueOpen", queueOpen);
-			DysMain.remoteDB.setParameter("percentFull", percentFull);
-			DysMain.remoteDB.setParameter("queueSize", queueSize);
-			DysMain.remoteDB.setParameter("currSongRemaining", DysMain.foobar.getCurrSongRemaining());
-			DysMain.remoteDB.setParameter("currSongLength", currSongLength);
+			DysMain.remoteDB.writeParam("queueLength", queueLength);
+			DysMain.remoteDB.writeParam("queueOpen", queueOpen);
+			DysMain.remoteDB.writeParam("percentFull", percentFull);
+			DysMain.remoteDB.writeParam("queueSize", queueSize);
+			DysMain.remoteDB.writeParam("currSongRemaining", DysMain.foobar.getCurrSongRemaining());
+			DysMain.remoteDB.writeParam("currSongLength", currSongLength);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 	}

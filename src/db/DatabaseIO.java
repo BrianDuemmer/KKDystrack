@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import org.sqlite.SQLiteErrorCode;
 
+import application.DysMain;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -257,15 +258,21 @@ public abstract class DatabaseIO
 	 * @return the value of the key (cast to an appropriate type) or null
 	 * if the key wasn't found
 	 */
-	private String readParameter(String key)
+	private Object readParamBase(String key, boolean asString)
 	{	
 		synchronized(this)
 		{
-			String val = ""; // Will return empty string on failure
-
+			String colName = "num_val";
+			if(asString)
+				colName = "str_val";
+			
+			
+			// Will return the default value of either a string or a number (depending on asString parameter) on failure
+			Object val = asString  ?  "" : new Double(0); 
+			
 			// Use a prepared Statement for added security
 			RCTables.paramTable.verifyExists(db);
-			String sql = "SELECT value2 FROM " +RCTables.paramTable.getName()+ " WHERE setting = ?";
+			String sql = "SELECT " +colName+ " FROM " +RCTables.paramTable.getName()+ " WHERE setting = ?";
 			ResultSet rs;
 			try
 			{
@@ -279,19 +286,22 @@ public abstract class DatabaseIO
 
 				if(!rs.next()) // if empty, print a warning and return empty string
 				{
-					System.err.println("WARNING: Could not find parameter key " +key+ ". Creating key with value \"0\"...");
-					setParameter(key, "0");
-					//Thread.dumpStack();
+					System.err.println("WARNING: Could not find parameter key " +key+ ". Creating key with default values...");
+					writeRawParam(key, "", 0);
+					//Thread.dumpStack(); // sometimes enabled for debugging
 				} 
-				// If this is hit then there is at least 1 result
-				else { val = rs.getString(1); }
+				// If this is hit then there is at least 1 result, parse the proper type
+				else if(asString){ val = rs.getString(1); }
+				else { val = rs.getDouble(1); }
 
 				rs.close();
 				ps.close();
 			} catch (SQLException e) 
 			{ 
-				System.err.println("ERROR attempting to read parameter key " +key);
-				e.printStackTrace(); 
+				System.err.println("database error attempting to read parameter key " +key);
+			} catch (Exception e) {
+				System.err.println("general error attempting to read parameter key " +key);
+				e.printStackTrace();
 			}
 
 			return val;
@@ -305,7 +315,7 @@ public abstract class DatabaseIO
 	 * @param key the name of the parameter
 	 * @return the value saved in the database
 	 */
-	public boolean readBoolParam(String key) { return new Boolean(readParameter(key)); }
+	public boolean readBoolParam(String key) { return new Boolean(readParamBase(key, true).toString()); }
 
 
 
@@ -317,15 +327,10 @@ public abstract class DatabaseIO
 	 */
 	public double readRealParam(String key) 
 	{ 
-		try { return new Double(readParameter(key)); }
+		try { return (Double) readParamBase(key, false); }
 		catch(Exception e) { 
 			System.err.println("Failed to parse Real for key \"" +key+ "\"");
-			try {
-				setParameter(key, 0);
-			} catch (SQLException e1) {
-				System.err.println("Failed to write default integer parameter");
-				e1.printStackTrace();
-			}
+			writeParam(key, 0);
 		}
 		return 0;
 	}
@@ -341,16 +346,11 @@ public abstract class DatabaseIO
 	 */
 	public int readIntegerParam(String key) 
 	{ 
-		try { return new Integer(readParameter(key)); }
+		try { return (Integer)readParamBase(key, false); }
 		catch(Exception e) 
 		{ 
 			System.err.println("Failed to parse Integer for key \"" +key+ "\""); 
-			try {
-				setParameter(key, 0);
-			} catch (SQLException e1) {
-				System.err.println("Failed to write default integer parameter");
-				e1.printStackTrace();
-			}
+			writeParam(key, 0);
 		}
 		return 0;
 	}
@@ -364,71 +364,67 @@ public abstract class DatabaseIO
 	 * @param key the name of the parameter
 	 * @return the value saved in the database, or 0 on an error
 	 */
-	public String readStringParam(String key) { return readParameter(key);}
-
-
-	/** Writes a real parameter to the database 
-	 * @throws SQLException */
-	public boolean setParameter(String key, double val) throws SQLException { return setParameter(key, String.valueOf(val)); }
-
-	/** Writes a boolean parameter to the database 
-	 * @throws SQLException */
-	public boolean setParameter(String key, boolean val) throws SQLException { return setParameter(key, String.valueOf(val)); }
-
-	/** Writes an integer parameter to the database 
-	 * @throws SQLException */
-	public boolean setParameter(String key, int val) throws SQLException { return setParameter(key, String.valueOf(val)); }
+	public String readStringParam(String key) { return readParamBase(key, true).toString();}
 
 
 	/**
 	 * Writes the specified key value pair to the database
-	 * @return true if the parameter was created, false otherwise
-	 * @throws SQLException 
+	 * @return true if the parameter was created, false otherwise 
 	 */
-	public boolean setParameter(String key, String value) throws SQLException
+	public void writeParam(String key, double val) { writeRawParam(key, "", val); }
+
+	/**
+	 * Writes the specified key value pair to the database
+	 * @return true if the parameter was created, false otherwise 
+	 */
+	public void writeParam(String key, boolean val) { writeRawParam(key, String.valueOf(val), 0); }
+
+	/**
+	 * Writes the specified key value pair to the database
+	 * @return true if the parameter was created, false otherwise 
+	 */
+	public void writeParam(String key, int val) { writeRawParam(key, "", val); }
+
+
+	/**
+	 * Writes the specified key value pair to the database
+	 * @return true if the parameter was created, false otherwise 
+	 */
+	public void writeParam(String key, String val) { writeRawParam(key, val, 0); }
+	
+	
+	
+	/**
+	 * Writes a raw parameter to the database
+	 */
+	private void writeRawParam(String key, String valS, double valN)
 	{
 		synchronized(this)
 		{
-			RCTables.paramTable.verifyExists(db);
-			String sql1 = "DELETE FROM " +RCTables.paramTable.getName()+ " WHERE setting=?";
-			String sql2 = "INSERT INTO " +RCTables.paramTable.getName()+ " VALUES( ?, ?, ?)";
-
-			try
-			{
-				//verifyTableExists(paramTable, paramTableCols);
+			try {
+				// Verify the database is ready for writing parameters
 				verifyConnected();
-
-				PreparedStatement ps1 = db.prepareStatement(sql1);
-				ps1.setString(1, key);
-				execRaw(ps1);
-
-				PreparedStatement ps2 = db.prepareStatement(sql2);
-				ps2.setString(1, key);
-				ps2.setLong(2, 0);
-				ps2.setString(3, value);
-				execRaw(ps2);
+				RCTables.paramTable.verifyExists(db);
 				
-				ps1.close();
-				ps2.close();
-
-				// if we reached this point, then the parameter was created and the values should be in the table
-				return true;
-			} 	
-			catch (SQLException e) // if this exception is thrown, that means the key already exists, so update instead
-			{ 
-				// if there's a timeout exception, let it propagate further to prevent locking up the database routines
-				if(e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code)
-					throw e;
-
-				else
-				{
-					System.err.println("Exception encountered in SetParameter()!");
-					e.printStackTrace();
-				}
-			} 
-
-			// If it didn't hit the above return statement, then the key wasn't newly created
-			return false;
+				// format statement to make sure a fresh key value pair goes in the DB
+				String sql = "REPLACE INTO " +RCTables.paramTable.getName()+ " VALUES (?, ?, ?);";
+				
+				PreparedStatement ps = db.prepareStatement(sql);
+				
+				// add parameters
+				ps.setString(1, key);
+				ps.setDouble(2, valN);
+				ps.setString(3, valS);
+				
+				System.out.println(sql);
+				
+				execRaw(ps);
+				ps.close();
+			} catch (SQLException e) {
+				System.err.println("SQL Error writing key!");
+				System.err.println(e.getMessage());
+//				e.printStackTrace();
+			}
 		}
 	}
 
@@ -441,7 +437,7 @@ public abstract class DatabaseIO
 	 */
 	public void writeRequestModeToDB(ReqMode mode) {
 		Thread t = new Thread(() -> {
-			try { setParameter("requestMode", mode.toString()); } 
+			try { writeParam("requestMode", mode.toString()); } 
 			catch (Exception e) 
 			{
 				Platform.runLater(() -> { new Alert(AlertType.ERROR, "Failed to write parameter \"requestMode\" to database!").show(); });
@@ -458,8 +454,12 @@ public abstract class DatabaseIO
 	/** Gets the current request mode */
 	public ReqMode getRequestMode()
 	{
+		ReqMode r = ReqMode.CLOSED;
 		String mode = readStringParam("requestMode");
-		ReqMode r = ReqMode.valueOf(mode);
+		
+		try {r = ReqMode.valueOf(mode); }
+		catch(Exception e) {System.err.println("error reading request mode"); }
+		
 		return r;
 	}
 

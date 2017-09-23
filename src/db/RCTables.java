@@ -19,8 +19,8 @@ public class RCTables
 			new DBCol[] 
 					{
 							new DBCol("setting", DBType.VARCHAR, true, true, "", false, 100),
-							new DBCol("value1", DBType.INTEGER),
-							new DBCol("value2", DBType.VARCHAR, false, false, "", false, 500)
+							new DBCol("num_val", DBType.REAL),
+							new DBCol("str_val", DBType.VARCHAR, false, false, "", false, 500)
 					}, 
 					""
 			);

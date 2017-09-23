@@ -54,10 +54,7 @@ public class Util
 			double val = Double.parseDouble(field.getText()); // Attempt to parse out the field
 
 			Thread t = new Thread(() -> {  // If we get here the field is valid, so we can push it to the database
-				try { DysMain.remoteDB.setParameter(name, val); } 
-
-				// DB error. Usually an SQLITE_BLOCKED due to the DB viewer being open with pending writes
-				catch (SQLException e) {new Alert(AlertType.ERROR, "Failed to push parameter \"" +name+ "\" to database. See error log for more details").showAndWait(); }
+				DysMain.remoteDB.writeParam(name, val);
 			});
 
 			t.setDaemon(true);
