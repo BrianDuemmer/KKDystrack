@@ -57,7 +57,7 @@ public class RequestControl
 	 */
 	public RequestControl()
 	{
-		DysMain.varCalcService.scheduleAtFixedRate(() -> { calcVars(); }, 1000, DysMain.varCalcUpdateMillis, TimeUnit.MILLISECONDS);
+		//DysMain.varCalcService.scheduleAtFixedRate(() -> { calcVars(); }, 1000, DysMain.varCalcUpdateMillis, TimeUnit.MILLISECONDS);
 	}
 	
 	
@@ -79,7 +79,7 @@ public class RequestControl
 		
 		String sql = "SELECT song_id, user_id, time_requested FROM " +RCTables.forwardQueueTable.getName()+ " WHERE priority=(SELECT MAX(priority) FROM " +RCTables.forwardQueueTable.getName()+ ")";
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			ResultSet rs = DysMain.remoteDB.execRaw(sql);
 			
 			if(rs.next()) { // The queue wasn't empty, so pick the first one from there
@@ -111,7 +111,7 @@ public class RequestControl
 		double length = 0;
 		
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			String sql = "SELECT length FROM " +RCTables.forwardQueueTable.getName()+ " WHERE 1=1;";
 			ResultSet rs = DysMain.remoteDB.execRaw(sql);
 			

@@ -5,7 +5,10 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import application.DysMain;
+import db.RCTables;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
@@ -54,7 +57,8 @@ public class Util
 			double val = Double.parseDouble(field.getText()); // Attempt to parse out the field
 
 			Thread t = new Thread(() -> {  // If we get here the field is valid, so we can push it to the database
-				DysMain.remoteDB.writeParam(name, val);
+				DysMain.localDB.writeParam(name, val);
+				DysMain.localDB.upSync(DysMain.remoteDB, RCTables.paramTable, false);
 			});
 
 			t.setDaemon(true);
@@ -70,6 +74,37 @@ public class Util
 
 			field.setText("0");
 		}
+	}
+	
+	
+	/**
+	 * Writes the value of the given checkbox to the database
+	 */
+	public static void writeCheckboxToDB(CheckBox box, String name) {
+		Thread t = new Thread(() -> {
+				DysMain.localDB.writeParam(name, box.isSelected());
+				DysMain.localDB.upSync(DysMain.remoteDB, RCTables.paramTable, false);
+		});
+
+		t.setDaemon(true);
+		t.setName("write " +name+ " to DB");
+		t.start();
+	}
+	
+	
+	
+	
+	/**
+	 * Writes the ReqMode to the database. This will run in a background thread.
+	 */
+	public static void writeRequestModeToDB(ReqMode mode) {
+		Thread t = new Thread(() -> {
+			DysMain.localDB.writeParam("requestMode", mode.toString());
+			DysMain.localDB.upSync(DysMain.remoteDB, RCTables.paramTable, false);
+		});
+		t.setDaemon(true);
+		t.setName("writeRequestMode");
+		t.start();
 	}
 
 

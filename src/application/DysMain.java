@@ -135,6 +135,7 @@ public class DysMain extends Application
 		//remoteDB = new SQLiteDatabaseIO(appDir +"/KKDystrack.sqlite");
 		
 		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort);
+		localDB = new SQLiteDatabaseIO(appDir + "KKDystrack.sqlite");
 		server = new ServerIO(SERVER_PORT);
 		
 		TimedTasks.startBuck();

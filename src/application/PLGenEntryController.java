@@ -152,7 +152,7 @@ public class PLGenEntryController
 						// We will either insert new records OR if we find a matching
 						// song_id, we will update the song_name, song_ost, and song_length records only
 						// Do it as a batch to expedite things
-						RCTables.playlistTable.verifyExists(memDB.getDb());
+						RCTables.playlistTable.verifyExists(memDB);
 						String sql = "INSERT OR REPLACE INTO " +RCTables.playlistTable.getName()+ " (song_name, ost_name, song_length, cost, cooldown, song_id) VALUES ("
 								+ "?, "
 								+ "?, "
@@ -326,8 +326,8 @@ public class PLGenEntryController
 		// Initialize the database
 		memDB = new SQLiteDatabaseIO(":memory:");
 		memDB.verifyConnected();
-		RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
-		RCTables.playlistTable.verifyExists(memDB.getDb());
+		RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+		RCTables.playlistTable.verifyExists(memDB);
 
 		// copy the data to the new DB
 		ResultSet backup = DysMain.remoteDB.execRaw("SELECT * FROM " +RCTables.playlistTable.getName()+ ";");

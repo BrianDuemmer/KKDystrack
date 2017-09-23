@@ -270,17 +270,17 @@ public abstract class DatabaseIO
 
 
 			// Will return the default value of either a string or a number (depending on asString parameter) on failure
-			Object val = asString  ?  "" : new Double(0); 
+			Object val = null; 
 
 			// Use a prepared Statement for added security
-			RCTables.paramTable.verifyExists(db);
+			RCTables.paramTable.verifyExists(this);
 			String sql = "SELECT " +colName+ " FROM " +RCTables.paramTable.getName()+ " WHERE setting = ?";
 			ResultSet rs;
 			try
 			{
 				// Be sure we are connected and that the table exists before proceeding
 				verifyConnected();
-				RCTables.paramTable.verifyExists(db);
+				RCTables.paramTable.verifyExists(this);
 
 				PreparedStatement ps = db.prepareStatement(sql);
 				ps.setString(1, key);
@@ -305,7 +305,11 @@ public abstract class DatabaseIO
 				System.err.println("general error attempting to read parameter key " +key);
 				e.printStackTrace();
 			}
-
+			
+			// if null just return a safe 
+			if(val == null)
+				val = asString  ?  "" : new Double(0);
+			
 			return val;
 		}
 	}
@@ -406,7 +410,7 @@ public abstract class DatabaseIO
 			try {
 				// Verify the database is ready for writing parameters
 				verifyConnected();
-				RCTables.paramTable.verifyExists(db);
+				RCTables.paramTable.verifyExists(this);
 
 				// format statement to make sure a fresh key value pair goes in the DB
 				String sql = "REPLACE INTO " +RCTables.paramTable.getName()+ " VALUES (?, ?, ?);";
@@ -418,7 +422,7 @@ public abstract class DatabaseIO
 				ps.setDouble(2, valN);
 				ps.setString(3, valS);
 
-				System.out.println(sql);
+//				System.out.println(sql);
 
 				execRaw(ps);
 				ps.close();
@@ -432,27 +436,6 @@ public abstract class DatabaseIO
 
 
 
-
-
-	/**
-	 * Writes the ReqMode to the database. This will run in a background thread.
-	 */
-	public void writeRequestModeToDB(ReqMode mode) {
-		Thread t = new Thread(() -> {
-			try { writeParam("requestMode", mode.toString()); } 
-			catch (Exception e) 
-			{
-				Platform.runLater(() -> { new Alert(AlertType.ERROR, "Failed to write parameter \"requestMode\" to database!").show(); });
-				e.printStackTrace();
-			}
-		});
-		t.setDaemon(true);
-		t.setName("writeRequestMode");
-		t.start();
-	}
-
-
-
 	/** Gets the current request mode */
 	public ReqMode getRequestMode()
 	{
@@ -460,7 +443,7 @@ public abstract class DatabaseIO
 		String mode = readStringParam("requestMode");
 
 		try {r = ReqMode.valueOf(mode); }
-		catch(Exception e) {System.err.println("error reading request mode"); }
+		catch(Exception e) {System.err.println("Error reading request mode"); }
 
 		return r;
 	}
@@ -472,7 +455,7 @@ public abstract class DatabaseIO
 	/** Gets the size of the current queue */
 	public int getQueueSize()
 	{
-		RCTables.forwardQueueTable.verifyExists(db);
+		RCTables.forwardQueueTable.verifyExists(this);
 		String sql = "SELECT COUNT(*) FROM " +RCTables.forwardQueueTable.getName();
 		int size = 0;
 
@@ -545,8 +528,8 @@ public abstract class DatabaseIO
 	public void upSync(DatabaseIO other, DBTable table, boolean clean)
 	{
 		// make sure the table exists here and in the remote
-		table.verifyExists(db);
-		table.verifyExists(other.getDb());
+		table.verifyExists(this);
+		table.verifyExists(other);
 
 
 		try {
@@ -579,7 +562,7 @@ public abstract class DatabaseIO
 
 				// add all of the values as a big fat batch statement
 				do {
-					for(int i=1; i<colCt; i++)
+					for(int i=1; i<=colCt; i++)
 						ps.setObject(i, rs.getObject(i));
 					ps.addBatch();
 					
@@ -590,7 +573,7 @@ public abstract class DatabaseIO
 					execRaw("DELETE FROM " +table.getName());
 					
 				// upsync that statement
-				other.execRaw(ps);
+				ps.executeBatch();
 				
 				// close everything
 				ps.close();

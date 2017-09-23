@@ -65,7 +65,7 @@ public class Viewer
 	 */
 	public void queryUser()
 	{
-		RCTables.viewerTable.verifyExists(DysMain.remoteDB.getDb());
+		RCTables.viewerTable.verifyExists(DysMain.remoteDB);
 		ResultSet rs = null;
 		
 		
@@ -123,7 +123,7 @@ public class Viewer
 		ResultSet res = null;
 		
 		try {
-			RCTables.viewerTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.viewerTable.verifyExists(DysMain.remoteDB);
 			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement("SELECT " // get everything, but make sure we know the order
 					+ "song_name, "
 					+ "ost_name, "

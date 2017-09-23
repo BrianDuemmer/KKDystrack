@@ -84,7 +84,7 @@ public class DropdownSongEntryController {
 		String sql = "SELECT song_name FROM " +RCTables.playlistTable.getName()+ " WHERE ost_name = ?";
 
 		Thread t = new Thread(() -> {
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
 
 			try { // Read the database values, warn on error
 				PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
@@ -203,7 +203,7 @@ public class DropdownSongEntryController {
 				ArrayList<String> osts = new ArrayList<String>();
 				try {
 					// get a 1-column list containing all unique, non null/empty OSTs
-					RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
+					RCTables.playlistTable.verifyExists(DysMain.remoteDB);
 					String sql = "SELECT DISTINCT ost_name FROM " +RCTables.playlistTable.getName() +" WHERE ost_name IS NOT NULL AND NOT ost_name = '';";
 					ResultSet rs = DysMain.remoteDB.execRaw(sql);
 

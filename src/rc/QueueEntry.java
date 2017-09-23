@@ -50,7 +50,7 @@ public class QueueEntry
 		try 
 		{
 			// just dump the whole table
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			ResultSet rs = DysMain.remoteDB.execRaw("SELECT * FROM " +RCTables.forwardQueueTable.getName()+ ";");
 
 			while(rs.next()) // read each table entry seperately and dump it into the QueueEntry
@@ -120,7 +120,7 @@ public class QueueEntry
 
 				try 
 				{
-					RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+					RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 					PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
 
 					// Add each value
@@ -213,7 +213,7 @@ public class QueueEntry
 
 
 			// Now format the add
-			RCTables.queueHistoryTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.queueHistoryTable.verifyExists(DysMain.remoteDB);
 			String sqlIns = "INSERT INTO " +RCTables.queueHistoryTable.getName()+ " ("
 					+ "username, "
 					+ "user_id, "
@@ -263,7 +263,7 @@ public class QueueEntry
 	public void deleteFromForwardQueue()
 	{
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			String sql = "DELETE FROM " +RCTables.forwardQueueTable.getName()+ " WHERE song_id=? AND time_requested=? AND user_ID =?;";
 
 			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
