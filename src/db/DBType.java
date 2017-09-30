@@ -13,7 +13,9 @@ public enum DBType
 	TEXT("TEXT"), 
 	BLOB("BLOB"),
 	DATETIME("DATETIME"),
-	VARCHAR("VARCHAR");
+	VARCHAR("VARCHAR"),
+	BOOLEAN("BOOLEAN");
+	
 	private final String value;
 
 	private DBType(final String value) { this.value = value; }

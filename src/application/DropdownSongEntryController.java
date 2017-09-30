@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
 import rc.Song;
-import rc.Viewer;
+import rc.viewer.Viewer;
 
 
 /**
@@ -133,7 +133,7 @@ public class DropdownSongEntryController {
 			else { // we have a valid playlist entry selected ready to add. we can also safely close the window
 				Rating r = new Rating(s.getSongID());
 
-				QueueEntry q = new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, r, s);
+				QueueEntry q = /*new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, r, s);*/null;
 				q.setPriority(new Integer(priority.getText()));
 				q.writeToDB();
 

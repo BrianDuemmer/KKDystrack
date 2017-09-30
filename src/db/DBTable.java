@@ -53,7 +53,7 @@ public class DBTable
 				sql += ", " +cols[i];
 			
 			if(!primaryKey.trim().isEmpty()) //if the primary key isn't null, empty, or whitespace, add the primary key flag
-				sql += ", PRIMARY KEY('" +primaryKey+ "')";
+				sql += ", PRIMARY KEY(" +primaryKey+ ")";
 			
 			sql +=");"; // cap off the statement, and execute
 			db.execRaw(sql);

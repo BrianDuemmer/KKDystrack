@@ -15,6 +15,8 @@ import http.ServerIO;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import rc.RequestControl;
+import rc.viewer.Viewer;
+import rc.viewer.ViewerFactory;
 import util.TimedTasks;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -137,6 +139,8 @@ public class DysMain extends Application
 		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort);
 		localDB = new SQLiteDatabaseIO(appDir + "KKDystrack.sqlite");
 		server = new ServerIO(SERVER_PORT);
+		Viewer v = ViewerFactory.newViewer("testID1");
+		v.getUserID();
 		
 		TimedTasks.startBuck();
 		

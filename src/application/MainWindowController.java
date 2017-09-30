@@ -653,6 +653,10 @@ public class MainWindowController
 		// Init the main controller / foobar interfaces
 		DysMain.rc = new RequestControl();
 		DysMain.foobar = new Foobar(DysMain.foobarPath);
+		
+//		System.out.println("veryfying all");
+//		RCTables.verifyAll(DysMain.remoteDB);
+//		System.out.println("Verified all");
 
 		// Init the server
 		try { 

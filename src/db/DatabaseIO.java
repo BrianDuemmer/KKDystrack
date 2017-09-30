@@ -577,8 +577,8 @@ public abstract class DatabaseIO
 				
 				// close everything
 				ps.close();
-				rs.close();
 			}
+			rs.close();
 
 		} catch (SQLException e) {
 			System.err.println("Error upsyncing to " +other.url);

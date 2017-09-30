@@ -78,7 +78,16 @@ public class RCTables
 							new DBCol("user_id", DBType.VARCHAR, true, false, "", false, 30),
 							new DBCol("rupees", DBType.INTEGER, true, false, "", false, 256),
 							new DBCol("favorite_song", DBType.VARCHAR, false, false, "", false, 256),
-							new DBCol("birthday", DBType.DATETIME)
+							new DBCol("is_admin", DBType.BOOLEAN),
+							new DBCol("is_blacklisted", DBType.BOOLEAN),
+							new DBCol("rupee_discount", DBType.REAL),
+							new DBCol("free_requests", DBType.INTEGER),
+							new DBCol("login_bonus_count", DBType.INTEGER),
+							new DBCol("watchtime_rank", DBType.VARCHAR, false, false, "", false, 50),
+							new DBCol("static_rank", DBType.VARCHAR, false, false, "", false, 50),
+							new DBCol("birthday", DBType.DATETIME),
+							new DBCol("last_birthday_withdraw", DBType.DATETIME),
+							new DBCol("song_on_hold", DBType.VARCHAR, false, false, "", false, 256)
 					}, 
 					""
 			);
@@ -158,5 +167,22 @@ public class RCTables
 					}, 
 					""
 			);
+	
+	
+	
+	/**
+	 * Makes sure each and every table exists in the database. Only for testing
+	 */
+	public static void verifyAll(DatabaseIO db)
+	{
+		paramTable.verifyExists(db);
+		forwardQueueTable.verifyExists(db);
+		queueHistoryTable.verifyExists(db);
+		viewerTable.verifyExists(db);
+		songOverrideTable.verifyExists(db);
+		playlistTable.verifyExists(db);
+		userBlacklistTable.verifyExists(db);
+		vipUserTable.verifyExists(db);
+	}
 
 }

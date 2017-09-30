@@ -3,6 +3,10 @@ package util;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Date;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import application.DysMain;
 import db.RCTables;
@@ -131,4 +135,26 @@ public class Util
 		out.close();
 		in.close();
 	}
+	
+	
+	
+	
+	/**
+	 * returns a new Gson object that will accept json produced by
+	 * the php end of things
+	 */
+	public static Gson gsonFromPHP() {
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(Boolean.class, new BooleanAsIntAdapter());
+		builder.registerTypeAdapter(boolean.class, new BooleanAsIntAdapter());
+		builder.registerTypeAdapter(Date.class, new DateDeserializer());
+		return builder.create();
+	}
 }
+
+
+
+
+
+
+

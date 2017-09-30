@@ -8,6 +8,7 @@ import application.DysMain;
 import db.RCTables;
 import foobarIO.Foobar;
 import javafx.scene.control.ProgressBar;
+import rc.viewer.Viewer;
 import util.ReqMode;
 
 /**
@@ -85,9 +86,9 @@ public class RequestControl
 			if(rs.next()) { // The queue wasn't empty, so pick the first one from there
 				song = new Song(rs.getString(1));
 				rating = new Rating(song.getSongID());
-				vw = new Viewer(rs.getString(2));
+				//vw = new Viewer(rs.getString(2));
 				
-				qe = new QueueEntry(vw, rs.getLong("time_requested"), rating, song);
+				qe = /*new QueueEntry(vw, rs.getLong("time_requested"), rating, song);*/null;
 				
 				rs.close();
 			}
