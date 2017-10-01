@@ -128,58 +128,7 @@ public class Viewer
 		this.userID = userID;
 		queryUser();
 	}
-	
-	
-	
-	
-	/**
-	 * Gets all of the requests that this user has made
-	 * @param maxMins maximum minutes to search backwards for, or -1 for everything
-	 * @return
-	 */
-//	public List<QueueEntry> getSongsPlayed(int maxMins)
-//	{
-//		// set cutoff to 0 if we don't want to set one
-//		long cutoff = 0;
-//		if(maxMins < 0)
-//			cutoff = System.currentTimeMillis() - ((long)maxMins) / 1000;
-//		
-//		List<QueueEntry> entries = new ArrayList<QueueEntry>();
-//		ResultSet res = null;
-//		
-//		try {
-//			RCTables.viewerTable.verifyExists(DysMain.remoteDB);
-//			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement("SELECT " // get everything, but make sure we know the order
-//					+ "song_name, "
-//					+ "ost_name, "
-//					+ "length, "
-//					+ "franchise_name, "
-//					+ "time_played, "
-//					+ "rating_num, "
-//					+ "rating_pct "
-//					+ "WHERE user_id = ? and time_played > ?;");
-//			
-//			ps.setString(1, userID);
-//			ps.setLong(2, cutoff);
-//			res = DysMain.remoteDB.execRaw(ps);
-//			
-//			// iteratively extract the information, pulling parameters based on their order above
-//			while(res.next())
-//			{
-//				Song s = new Song(res.getString(1), res.getString(2), res.getInt(3), res.getString(4));
-//				Rating r = new Rating(res.getInt(6), res.getDouble(7));
-//				entries.add(/*new QueueEntry(this, res.getLong(5), r, s)*/null);
-//			}
-//			
-//			res.close();
-//		} catch (SQLException e) 
-//		{
-//			System.err.println("Exception encountered in getSongsPlayed()!");
-//			e.printStackTrace();
-//		}	
-//		
-//		return entries;
-//	}
+
 
 
 	public String getUserID() { return userID; }

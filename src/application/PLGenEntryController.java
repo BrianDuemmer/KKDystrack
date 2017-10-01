@@ -45,11 +45,6 @@ public class PLGenEntryController
 	// Specifies whether we shut down gracefully or not
 	private boolean graceful = false;
 
-	// Temporary in-memory database to support faster 
-	private DatabaseIO memDB;
-
-
-
 
 
 
@@ -140,28 +135,32 @@ public class PLGenEntryController
 			@Override protected Void call() throws Exception 
 			{
 				try {
+					// update the local DB
+					DysMain.remoteDB.upSync(DysMain.localDB, RCTables.playlistTable, true);
 
 					// read playlist root, make sure it is valid
-					String rootPath = DysMain.remoteDB.readStringParam("playlistRoot");
+					String rootPath = DysMain.localDB.readStringParam("playlistRoot");
 					File root = new File(rootPath);
 
 					if(!rootPath.isEmpty() && root.isDirectory()) { // only go if it's valid
-						initBackupDB();
 
 						// Format the statement to enter these into the database
 						// We will either insert new records OR if we find a matching
 						// song_id, we will update the song_name, song_ost, and song_length records only
 						// Do it as a batch to expedite things
-						RCTables.playlistTable.verifyExists(memDB);
-						String sql = "INSERT OR REPLACE INTO " +RCTables.playlistTable.getName()+ " (song_name, ost_name, song_length, cost, cooldown, song_id) VALUES ("
+						RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+						
+						DysMain.remoteDB.getDb().setAutoCommit(false);
+						
+						String sql = "INSERT INTO " +RCTables.playlistTable.getName()+ " (song_id, song_name, ost_name, song_length, song_franchise, song_alias) VALUES ("
 								+ "?, "
 								+ "?, "
 								+ "?, "
-								+ "?, "//"COALESCE((SELECT rating_pct FROM " +RCTables.playlistTable.getName()+ " WHERE song_id=?), 0.0), " 
-								+ "?, "//"COALESCE((SELECT rating_num FROM " +RCTables.playlistTable.getName()+ " WHERE song_id=?), 0), "
-								+ "? );";
+								+ "?, "
+								+ "?, "
+								+ "? )";
 
-						PreparedStatement ps = memDB.getDb().prepareStatement(sql);
+						PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
 
 						// Now onto processing the songs
 						List<File> osts = getOSTs(root);
@@ -199,18 +198,22 @@ public class PLGenEntryController
 							}
 						}
 
+						
+						
 						// Execute the whole batch, shutdown
 						Platform.runLater(() -> {
-							ostLabel.setText("OST:Writing batch inserts to backup...");
-							songLabel.setText("Song: Writing batch inserts to backup...");
+							ostLabel.setText("OST: Committing playlist...");
+							songLabel.setText("Song: Committing playlist...");
+							ostProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+							ostProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 						});
+						
+						// empty it first!
+						DysMain.remoteDB.execRaw("DELETE FROM " +RCTables.playlistTable.getName());
 						ps.executeBatch();
+						DysMain.remoteDB.getDb().commit();
+						DysMain.remoteDB.getDb().setAutoCommit(false);
 
-						Platform.runLater(() -> {
-							ostLabel.setText("OST:Restoring backup...");
-							songLabel.setText("Song: Restoring backup...");
-						});
-						restoreBackup();
 
 						// Shutdown stuff
 						graceful = !stop; //if stop hasn't been set, then it finished on its own
@@ -219,6 +222,8 @@ public class PLGenEntryController
 								ostLabel.setText("OST: Done");
 								songLabel.setText("Song: Done");
 								mainBtn.setText("OK");
+								ostProgressBar.setProgress(1);
+								ostProgressBar.setProgress(1);
 							});
 						}
 
@@ -301,12 +306,12 @@ public class PLGenEntryController
 			//			songID = ost.getName() +"\\"+ song.getName(); // SongID is just the path of the song relative to the playlist root directory
 			songID = song.getAbsolutePath(); // using the absolute path uses a bit more database space, but saves on IOps and increases stability
 
-			ps.setString(1, songName);
-			ps.setString(2, ostName);
-			ps.setDouble(3, dur);
-			ps.setDouble(4, 0); // 4/5 are for the select statements to copy old rating data // now for cost calculation info. set o 0 for now.
-			ps.setDouble(5, 0);
-			ps.setString(6, songID); // 6 is the regular song_id insert
+			ps.setString(1, songID);
+			ps.setString(2, songName);
+			ps.setString(3, ostName);
+			ps.setDouble(4, dur); 
+			ps.setString(5, ""); // TODO setup franchise / aliases
+			ps.setString(6, "");
 
 			ps.addBatch();
 		} 
@@ -315,84 +320,8 @@ public class PLGenEntryController
 		catch (SQLException e) { System.err.println("Error writing to database for song " +song.getName());   e.printStackTrace(); }
 		catch (Exception e) { System.out.println("Error reading song file " +song.getName());   e.getClass().getName(); }
 	}
-
-
-
-
-
-
-	/** Does all of the DB init, incuding for the backup DB */
-	private void initBackupDB() throws SQLException {
-		// Initialize the database
-		memDB = new SQLiteDatabaseIO(":memory:");
-		memDB.verifyConnected();
-		RCTables.playlistTable.verifyExists(DysMain.remoteDB);
-		RCTables.playlistTable.verifyExists(memDB);
-
-		// copy the data to the new DB
-		ResultSet backup = DysMain.remoteDB.execRaw("SELECT * FROM " +RCTables.playlistTable.getName()+ ";");
-		PreparedStatement ins = memDB.getDb().prepareStatement("INSERT INTO " +RCTables.playlistTable.getName()+ " ("
-				+ "song_name, "
-				+ "ost_name, "
-				+ "cost, " // rating_pct
-				+ "song_length, "
-				+ "cooldown, " //rating_num
-				+ "song_id) "
-				+ "VALUES (?, ?, ?, ?, ?, ?);");
-
-		while(backup.next())
-		{
-			ins.setString(1, backup.getString("song_name"));
-			ins.setString(2, backup.getString("ost_name"));
-			ins.setDouble(3, backup.getDouble("cost"));
-			ins.setDouble(4, backup.getDouble("song_length"));
-			ins.setDouble(5, backup.getDouble("cooldown"));
-			ins.setString(6, backup.getString("song_id"));
-
-			ins.addBatch();
-		}
-
-		ins.executeBatch();
-	}
-
-
-
-
-
-
-
-	/** Restores the playlist to the main database */
-	private void restoreBackup() throws SQLException
-	{
-		// clean out the old playlist
-		DysMain.remoteDB.execRaw("DELETE FROM " +RCTables.playlistTable.getName()+ ";");
-
-		// copy the data to the old DB
-		ResultSet restore = memDB.execRaw("SELECT * FROM " +RCTables.playlistTable.getName()+ ";");
-		PreparedStatement ins = DysMain.remoteDB.getDb().prepareStatement("INSERT INTO " +RCTables.playlistTable.getName()+ " ("
-				+ "song_name, "
-				+ "ost_name, "
-				+ "cost, " // rating_pct
-				+ "song_length, "
-				+ "cooldown, " //rating_num
-				+ "song_id) "
-				+ "VALUES (?, ?, ?, ?, ?, ?);");
-
-		while(restore.next())
-		{
-			ins.setString(1, restore.getString("song_name"));
-			ins.setString(2, restore.getString("ost_name"));
-			ins.setDouble(3, restore.getDouble("cost"));
-			ins.setDouble(4, restore.getDouble("song_length"));
-			ins.setDouble(5, restore.getDouble("cooldown"));
-			ins.setString(6, restore.getString("song_id"));
-
-			ins.addBatch();
-		}
-
-		ins.executeBatch();
-		memDB.getDb().close();
-	}
+	
+	
 
 
 

@@ -557,7 +557,8 @@ public abstract class DatabaseIO
 				}
 				
 				// build the prepared statement
-				insSQL += ")" +valSQL+ ");";
+				insSQL += ")" +valSQL+ ")";
+//				System.out.println(insSQL);
 				PreparedStatement ps = other.getDb().prepareStatement(insSQL);
 
 				// add all of the values as a big fat batch statement
@@ -570,7 +571,7 @@ public abstract class DatabaseIO
 				
 				//clean the table if necessary
 				if(clean)
-					execRaw("DELETE FROM " +table.getName());
+					other.execRaw("DELETE FROM " +table.getName());
 					
 				// upsync that statement
 				ps.executeBatch();

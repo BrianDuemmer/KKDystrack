@@ -13,9 +13,9 @@ public class MySQLDatabaseIO extends DatabaseIO
 	protected int port;
 	
 	
-	public MySQLDatabaseIO(String hostname, String user, String pass, String dbName, int port) 
+	public MySQLDatabaseIO(String hostname, String user, String pass, String dbName, int port, String argString) 
 	{
-		super("jdbc:mysql://" +hostname+ ":" +port+ "/" +dbName);
+		super("jdbc:mysql://" +hostname+ ":" +port+ "/" +dbName+ argString);
 		
 		this.hostname = hostname;
 		this.user = user;
