@@ -9,12 +9,15 @@ import java.util.concurrent.ThreadFactory;
 
 import db.DatabaseIO;
 import db.MySQLDatabaseIO;
+import db.RCTables;
 import db.SQLiteDatabaseIO;
 import foobarIO.Foobar;
 import http.ServerIO;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import rc.RequestControl;
+import rc.viewer.Viewer;
+import rc.viewer.ViewerFactory;
 import util.TimedTasks;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -44,7 +47,7 @@ public class DysMain extends Application
 	public static final int varCalcUpdateMillis = 1000;
 	public static final int UIUpdateMillis = 300;
 	public static String queueDumpPath = appDir+ "\\queue.csv";
-	public static final int SERVER_PORT = 49161;
+	public static final int SERVER_PORT = 7095;
 	
 	private static final String remoteDbUser = "dystify_dev";
 	private static final String remoteDbPass = "foobarbaz3001";
@@ -125,6 +128,7 @@ public class DysMain extends Application
 		// Stop all update threads, provided they aren't null
 		if(UIUpdateService != null)
 			UIUpdateService.shutdown();
+		System.exit(0);
 	}
 	
 	
@@ -134,7 +138,8 @@ public class DysMain extends Application
 		new File(appDir).mkdirs(); // verify the property app directory exists
 		//remoteDB = new SQLiteDatabaseIO(appDir +"/KKDystrack.sqlite");
 		
-		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort);
+		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort, "?rewriteBatchedStatements=true");
+		localDB = new SQLiteDatabaseIO(appDir + "KKDystrack.sqlite");
 		server = new ServerIO(SERVER_PORT);
 		
 		TimedTasks.startBuck();

@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
 import rc.Song;
-import rc.Viewer;
+import rc.viewer.Viewer;
 
 public class SongEntryPopupController {
 
@@ -92,11 +92,11 @@ public class SongEntryPopupController {
     	// The entry was good and can be added
     	
     	/**@TODO Add a proper changeable username. Now it's just dysbot's info */
-    	Viewer vw = Viewer.dysbot;
+    	//Viewer vw = Viewer.dysbot;
     	Rating r = new Rating(song.getSongID());
     	
     	// format queue entry
-    	QueueEntry q = new QueueEntry(vw, System.currentTimeMillis() / 1000L, r, song);
+    	QueueEntry q = /*new QueueEntry(vw, System.currentTimeMillis() / 1000L, r, song);*/null;
     	q.setPriority(priority);
     	
     	// Write it to the database

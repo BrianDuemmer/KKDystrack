@@ -19,8 +19,8 @@ public class RCTables
 			new DBCol[] 
 					{
 							new DBCol("setting", DBType.VARCHAR, true, true, "", false, 100),
-							new DBCol("value1", DBType.INTEGER),
-							new DBCol("value2", DBType.VARCHAR, false, false, "", false, 500)
+							new DBCol("num_val", DBType.REAL),
+							new DBCol("str_val", DBType.VARCHAR, false, false, "", false, 500)
 					}, 
 					""
 			);
@@ -38,9 +38,9 @@ public class RCTables
 							new DBCol("user_id", DBType.VARCHAR, true, false, "", false, 30),
 							new DBCol("time_requested", DBType.DATETIME, true, false, "", false, -1),
 							new DBCol("song_id", DBType.VARCHAR, true, false, "", false, 256),
-							new DBCol("priority", DBType.INTEGER, true, false, "", false, -1)
+							new DBCol("priority", DBType.INTEGER, true, false, "", false, -1),
 					}, 
-					"time_requested"
+					""
 			);
 
 
@@ -54,13 +54,14 @@ public class RCTables
 			"queue_history", 
 			new DBCol[] 
 					{
-						new DBCol("user_id", DBType.VARCHAR, true, false, "", false, 30),
-						new DBCol("time_requested", DBType.DATETIME, true, false, "", false, -1),
-						new DBCol("song_id", DBType.VARCHAR, true, false, "", false, 256),
-						new DBCol("priority", DBType.INTEGER, true, false, "", false, -1),
-						new DBCol("time_played", DBType.DATETIME, true, false, "", false, -1)
+							new DBCol("user_id", DBType.VARCHAR, true, false, "", false, 30),
+							new DBCol("time_requested", DBType.DATETIME, true, false, "", false, -1),
+							new DBCol("song_id", DBType.VARCHAR, true, false, "", false, 256),
+							new DBCol("priority", DBType.INTEGER, true, false, "", false, -1),
+							new DBCol("time_played", DBType.DATETIME, true, false, "", false, -1),
+							new DBCol("play_id", DBType.BIGINT, true, true, "", true, -1)
 					}, 
-					"time_played"
+					"play_id"
 			);
 
 
@@ -77,7 +78,16 @@ public class RCTables
 							new DBCol("user_id", DBType.VARCHAR, true, false, "", false, 30),
 							new DBCol("rupees", DBType.INTEGER, true, false, "", false, 256),
 							new DBCol("favorite_song", DBType.VARCHAR, false, false, "", false, 256),
-							new DBCol("birthday", DBType.DATETIME)
+							new DBCol("is_admin", DBType.BOOLEAN),
+							new DBCol("is_blacklisted", DBType.BOOLEAN),
+							new DBCol("rupee_discount", DBType.REAL),
+							new DBCol("free_requests", DBType.INTEGER),
+							new DBCol("login_bonus_count", DBType.INTEGER),
+							new DBCol("watchtime_rank", DBType.VARCHAR, false, false, "", false, 50),
+							new DBCol("static_rank", DBType.VARCHAR, false, false, "", false, 50),
+							new DBCol("birthday", DBType.DATETIME),
+							new DBCol("last_birthday_withdraw", DBType.DATETIME),
+							new DBCol("song_on_hold", DBType.VARCHAR, false, false, "", false, 256)
 					}, 
 					""
 			);
@@ -94,10 +104,9 @@ public class RCTables
 			"song_overrides", 
 			new DBCol[] 
 					{
-							new DBCol("song_id", DBType.TEXT, true, false, "", false),
-							new DBCol("base_cost", DBType.REAL, true, false, "", false),
-							new DBCol("history_expire_mins", DBType.REAL, true, false, "", false),
-							new DBCol("immediate_replay_scl", DBType.REAL, true, false, "", false)
+							new DBCol("song_id", DBType.VARCHAR, true, false, "", false, 256),
+							new DBCol("base_cost", DBType.REAL, true, false, "", false, -1),
+							new DBCol("base_cooldown", DBType.REAL, true, false, "", false, -1)
 					}, 
 					""
 			);
@@ -133,8 +142,7 @@ public class RCTables
 			"user_blacklist", 
 			new DBCol[] 
 					{
-							new DBCol("username", DBType.TEXT),
-							new DBCol("channelID", DBType.TEXT, true, true, "", false),
+							new DBCol("user_id", DBType.VARCHAR, true, true, "", false, 30),
 							new DBCol("time_banned", DBType.INTEGER),
 							new DBCol("note", DBType.TEXT)
 					}, 
@@ -153,12 +161,28 @@ public class RCTables
 			"vip_users", 
 			new DBCol[] 
 					{
-							new DBCol("username", DBType.TEXT),
-							new DBCol("channelID", DBType.TEXT, true, true, "", false),
+							new DBCol("user_id", DBType.VARCHAR, true, true, "", false, 30),
 							new DBCol("cost_scalar", DBType.REAL),
 							new DBCol("note", DBType.TEXT)
 					}, 
 					""
 			);
+	
+	
+	
+	/**
+	 * Makes sure each and every table exists in the database. Only for testing
+	 */
+	public static void verifyAll(DatabaseIO db)
+	{
+		paramTable.verifyExists(db);
+		forwardQueueTable.verifyExists(db);
+		queueHistoryTable.verifyExists(db);
+		viewerTable.verifyExists(db);
+		songOverrideTable.verifyExists(db);
+		playlistTable.verifyExists(db);
+		userBlacklistTable.verifyExists(db);
+		vipUserTable.verifyExists(db);
+	}
 
 }

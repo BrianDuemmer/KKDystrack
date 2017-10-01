@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
 import rc.Song;
-import rc.Viewer;
+import rc.viewer.Viewer;
 
 /**
  * Here is where we define any tasks that should run at specified calendar times. Almost
@@ -52,7 +52,7 @@ public class TimedTasks
 				double dur = AudioFileIO.read(buck).getAudioHeader().getTrackLength();
 				
 				Song s = new Song(newBuckName, newBuckOST, dur, "Pikmin", newBuckPath);
-				QueueEntry q = new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, new Rating(0,0), s);
+				QueueEntry q = /*new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, new Rating(0,0), s);*/null;
 				
 				DysMain.foobar.addToPlaybackQueue(q);
 				

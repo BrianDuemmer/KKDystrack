@@ -36,7 +36,7 @@
                                                         <items>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                                <children>
-                                                                  <VBox layoutY="120.0" prefHeight="595.0" prefWidth="147.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                  <VBox layoutY="120.0" prefHeight="595.0" prefWidth="147.0" spacing="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                      <children>
                                                                         <Label maxWidth="1.7976931348623157E308" text="Percent Random" textAlignment="CENTER">
                                                                            <VBox.margin>
@@ -85,11 +85,6 @@
                                                                            </tooltip>
                                                                         </Label>
                                                                         <Label layoutX="10.0" layoutY="199.0" maxWidth="1.7976931348623157E308" text="Base Immediate Replay scl." textAlignment="CENTER">
-                                                                           <padding>
-                                                                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                                                                           </padding>
-                                                                        </Label>
-                                                                        <Label layoutX="10.0" layoutY="226.0" maxWidth="1.7976931348623157E308" text="Playlist Root" textAlignment="CENTER">
                                                                            <padding>
                                                                               <Insets bottom="5.0" left="5.0" top="5.0" />
                                                                            </padding>
@@ -148,11 +143,6 @@
                                                                            </VBox.margin>
                                                                         </TextField>
                                                                         <TextField fx:id="baseImmediateReplaySclEntry" layoutX="15.0" layoutY="201.0" onAction="#baseImmediateReplaySclOnAction" prefHeight="25.0" prefWidth="102.0">
-                                                                           <VBox.margin>
-                                                                              <Insets left="5.0" right="5.0" top="3.0" />
-                                                                           </VBox.margin>
-                                                                        </TextField>
-                                                                        <TextField fx:id="playlistRootEntry" layoutX="15.0" layoutY="229.0" onAction="#playlistRootOnAction" prefHeight="25.0" prefWidth="102.0">
                                                                            <VBox.margin>
                                                                               <Insets left="5.0" right="5.0" top="3.0" />
                                                                            </VBox.margin>
@@ -579,12 +569,12 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#saveParams" text="Save Params" />
                         <MenuItem mnemonicParsing="false" onAction="#revertParams" text="Load Params" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Settings..." />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Playlist">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#regenPlaylist" text="Regenerate Playlist" />
-                        <MenuItem mnemonicParsing="false" onAction="#cleanPlaylist" text="Clean Playlist Build" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#deleteForwardQueue" text="Delete Queue" />
                     </items>

@@ -8,11 +8,14 @@ package db;
 public enum DBType 
 {
 	INTEGER("INTEGER"), 
+	BIGINT("BIGINT"),
 	REAL("REAL"), 
 	TEXT("TEXT"), 
 	BLOB("BLOB"),
 	DATETIME("DATETIME"),
-	VARCHAR("VARCHAR");
+	VARCHAR("VARCHAR"),
+	BOOLEAN("BOOLEAN");
+	
 	private final String value;
 
 	private DBType(final String value) { this.value = value; }

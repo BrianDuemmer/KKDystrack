@@ -8,6 +8,7 @@ import application.DysMain;
 import db.RCTables;
 import foobarIO.Foobar;
 import javafx.scene.control.ProgressBar;
+import rc.viewer.Viewer;
 import util.ReqMode;
 
 /**
@@ -57,7 +58,7 @@ public class RequestControl
 	 */
 	public RequestControl()
 	{
-		DysMain.varCalcService.scheduleAtFixedRate(() -> { calcVars(); }, 1000, DysMain.varCalcUpdateMillis, TimeUnit.MILLISECONDS);
+		//DysMain.varCalcService.scheduleAtFixedRate(() -> { calcVars(); }, 1000, DysMain.varCalcUpdateMillis, TimeUnit.MILLISECONDS);
 	}
 	
 	
@@ -79,15 +80,15 @@ public class RequestControl
 		
 		String sql = "SELECT song_id, user_id, time_requested FROM " +RCTables.forwardQueueTable.getName()+ " WHERE priority=(SELECT MAX(priority) FROM " +RCTables.forwardQueueTable.getName()+ ")";
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			ResultSet rs = DysMain.remoteDB.execRaw(sql);
 			
 			if(rs.next()) { // The queue wasn't empty, so pick the first one from there
 				song = new Song(rs.getString(1));
 				rating = new Rating(song.getSongID());
-				vw = new Viewer(rs.getString(2));
+				//vw = new Viewer(rs.getString(2));
 				
-				qe = new QueueEntry(vw, rs.getLong("time_requested"), rating, song);
+				qe = /*new QueueEntry(vw, rs.getLong("time_requested"), rating, song);*/null;
 				
 				rs.close();
 			}
@@ -111,7 +112,7 @@ public class RequestControl
 		double length = 0;
 		
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
 			String sql = "SELECT length FROM " +RCTables.forwardQueueTable.getName()+ " WHERE 1=1;";
 			ResultSet rs = DysMain.remoteDB.execRaw(sql);
 			
@@ -152,12 +153,12 @@ public class RequestControl
 		
 //		 Write that stuff to the database
 		try {
-			DysMain.remoteDB.setParameter("queueLength", queueLength);
-			DysMain.remoteDB.setParameter("queueOpen", queueOpen);
-			DysMain.remoteDB.setParameter("percentFull", percentFull);
-			DysMain.remoteDB.setParameter("queueSize", queueSize);
-			DysMain.remoteDB.setParameter("currSongRemaining", DysMain.foobar.getCurrSongRemaining());
-			DysMain.remoteDB.setParameter("currSongLength", currSongLength);
+			DysMain.remoteDB.writeParam("queueLength", queueLength);
+			DysMain.remoteDB.writeParam("queueOpen", queueOpen);
+			DysMain.remoteDB.writeParam("percentFull", percentFull);
+			DysMain.remoteDB.writeParam("queueSize", queueSize);
+			DysMain.remoteDB.writeParam("currSongRemaining", DysMain.foobar.getCurrSongRemaining());
+			DysMain.remoteDB.writeParam("currSongLength", currSongLength);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 	}
