@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -139,7 +140,7 @@ public class PLGenEntryController
 					DysMain.remoteDB.upSync(DysMain.localDB, RCTables.playlistTable, true);
 
 					// read playlist root, make sure it is valid
-					String rootPath = DysMain.localDB.readStringParam("playlistRoot");
+					String rootPath = Preferences.userNodeForPackage(DysMain.class).get("playlistRoot", "");
 					File root = new File(rootPath);
 
 					if(!rootPath.isEmpty() && root.isDirectory()) { // only go if it's valid
@@ -147,10 +148,10 @@ public class PLGenEntryController
 						// Format the statement to enter these into the database
 						// We will either insert new records OR if we find a matching
 						// song_id, we will update the song_name, song_ost, and song_length records only
-						// Do it as a batch to expedite things
+						// Do it as a batch to expedite things 
 						RCTables.playlistTable.verifyExists(DysMain.remoteDB);
 						
-						DysMain.remoteDB.getDb().setAutoCommit(false);
+						// DysMain.remoteDB.getDb().setAutoCommit(false);
 						
 						String sql = "INSERT INTO " +RCTables.playlistTable.getName()+ " (song_id, song_name, ost_name, song_length, song_franchise, song_alias) VALUES ("
 								+ "?, "
@@ -211,12 +212,12 @@ public class PLGenEntryController
 						// empty it first!
 						DysMain.remoteDB.execRaw("DELETE FROM " +RCTables.playlistTable.getName());
 						ps.executeBatch();
-						DysMain.remoteDB.getDb().commit();
-						DysMain.remoteDB.getDb().setAutoCommit(false);
+//						DysMain.remoteDB.getDb().commit();
+//						DysMain.remoteDB.getDb().setAutoCommit(true);
 
 
 						// Shutdown stuff
-						graceful = !stop; //if stop hasn't been set, then it finished on its own
+						graceful = !stop; //if stop hasn't been set, then it finished on its own 
 						if(graceful) {
 							Platform.runLater(() -> {
 								ostLabel.setText("OST: Done");
@@ -234,7 +235,7 @@ public class PLGenEntryController
 						
 					} else { // playlist root is bad, alert and shutdown
 						Platform.runLater(() -> {
-							new Alert(AlertType.ERROR, "Playlist root \"" +root.getAbsolutePath()+ "\" is an invalid or nonexistent directory! Cannot regenerate playlist").showAndWait(); 
+							new Alert(AlertType.ERROR, "Playlist root \"" +rootPath+ "\" is an invalid or nonexistent directory! Cannot regenerate playlist").showAndWait(); 
 							
 							Stage stage = (Stage) mainBtn.getScene().getWindow();
 							stage.close();

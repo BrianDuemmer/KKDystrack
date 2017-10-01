@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 
 import db.RCTables;
 import foobarIO.Foobar;
@@ -200,8 +201,6 @@ public class MainWindowController
 
 	@FXML private MenuItem queueTableMenuRemoveSong;
 
-	@FXML private TextField playlistRootEntry;
-
 	@FXML private TextField skipSongTimeEntry;
 
 	@FXML private MenuItem songOverrideAddSong;
@@ -327,35 +326,53 @@ public class MainWindowController
 		Foobar.skipSongTime = DysMain.remoteDB.readRealParam("skipSongTime");
 	}
 
-	@FXML void playlistRootOnAction(ActionEvent event) {
+	
+	
+	
+	
+	
+	/** Displays the settings entry dialog */
+	@FXML void openSettingsPage(ActionEvent event) {
+		Parent root;
+		Preferences pref = Preferences.userNodeForPackage(DysMain.class);
+		String origPlaylistRoot = pref.get("playlistRoot", "");
 
-		// only run if the value has actually changed
-		if( !playlistRootEntry.getText().equals(DysMain.remoteDB.readStringParam("playlistRoot")) )
+		try {
+			root = FXMLLoader.load(getClass().getClassLoader().getResource("application/propEntry.fxml"));
+			Stage stage = new Stage();
+			stage.setTitle("Dystrack Settings");
+			stage.setScene(new Scene(root));
+			stage.setResizable(false);
+			stage.showAndWait(); 
+
+			// Wait for that system to finish, then prompt to rebuild playlist if the root changed, and the root isn't empty
+			if(!origPlaylistRoot.equalsIgnoreCase(pref.get("playlistRoot", "")) && !pref.get("playlistRoot", "").trim().isEmpty()) 
+			{
+				Alert a = new Alert(
+						AlertType.CONFIRMATION, 
+						"Changing the playlist root normally requires rebuilding the playlist. Do this now?", 
+						ButtonType.YES, ButtonType.NO
+						);
+				Optional<ButtonType> b = a.showAndWait();
+
+				if(b.isPresent() && b.get() == ButtonType.YES)
+					regenPlaylist(null);
+			}
+
+
+		} catch(Exception e)
 		{
-			Thread t = new Thread(() -> {
-				DysMain.localDB.writeParam("playlistRoot", playlistRootEntry.getText()); 
-				DysMain.localDB.upSync(DysMain.remoteDB, RCTables.paramTable, false);
-				
-				Platform.runLater(() -> {
-					Alert a = new Alert(
-							AlertType.CONFIRMATION, 
-							"Changing the playlist root normally requires cleanly rebuilding the playlist. Do this now?", 
-							ButtonType.YES, ButtonType.NO
-							);
-					Optional<ButtonType> b = a.showAndWait();
-
-					if(b.isPresent() && b.get() == ButtonType.YES) // will run cleanPlaylist without an alert
-						cleanPlaylist(null);
-				});
-			});
-			
-			t.setDaemon(true);
-			t.setName("writePlaylistRoot");
-			t.start();
+			e.printStackTrace();
+			Alert a = new Alert(AlertType.ERROR, "Error encountered opening settings. Check error log for more details");
+			a.setTitle("Settings Error");
+			a.showAndWait();
 		}
 	}
 
 
+	
+	
+	
 	/**
 	 * Gray / ungray the manual mode button depending on whether or not the
 	 * "Auto" checkbox is selected
@@ -503,36 +520,6 @@ public class MainWindowController
 	@FXML void showCredits(ActionEvent event) { /*TimedTasks.doGoToSleepDys.run();*/ }
 
 
-
-	/** Does a clean build of the playlist, deleting all old records.
-	 * Passing a null event signifies that this should be run without confirmation 
-	 */
-	@FXML void cleanPlaylist(ActionEvent event)
-	{
-		Optional<ButtonType> b = null; // we can do this without worrying about null ptr a few lines down because of operator precedence
-		if(event != null) 
-		{
-			Alert a = new Alert(AlertType.CONFIRMATION, "This will delete the ENTIRE playlists before regenerating. All ratings will be lost. Continue?");
-			b = a.showAndWait();
-		}
-
-		if(event == null || (b.isPresent() && b.get() == ButtonType.OK)) { // only run if in no alert mode or the user selected "OK"
-			Thread t = new Thread(() -> {
-				// Drop the table 
-				RCTables.playlistTable.dropIfExist(DysMain.remoteDB);
-				Platform.runLater(() -> { regenPlaylist(null); });
-			});
-
-			t.setDaemon(true);
-			t.setName("Clean playlist");
-			t.start();
-		}
-	}
-
-
-
-
-
 	/** Deletes the entire forward queue */
 	@FXML void deleteForwardQueue(ActionEvent event)
 	{
@@ -653,10 +640,10 @@ public class MainWindowController
 		// Init the main controller / foobar interfaces
 		DysMain.rc = new RequestControl();
 		DysMain.foobar = new Foobar(DysMain.foobarPath);
-		
-//		System.out.println("veryfying all");
-//		RCTables.verifyAll(DysMain.remoteDB);
-//		System.out.println("Verified all");
+
+		//		System.out.println("veryfying all");
+		//		RCTables.verifyAll(DysMain.remoteDB);
+		//		System.out.println("Verified all");
 
 		// Init the server
 		try { 
@@ -877,7 +864,7 @@ public class MainWindowController
 	private void readConfigParams()
 	{
 		System.out.println("Loading configuration parameters...");
-		
+
 		Task<Void> tsk = new Task<Void>()
 		{
 			@Override
@@ -886,8 +873,8 @@ public class MainWindowController
 				try 
 				{
 					// clone the settings data from the remote
-					DysMain.remoteDB.upSync(DysMain.localDB, RCTables.paramTable, true);
-					
+					DysMain.remoteDB.upSync(DysMain.localDB, RCTables.paramTable, false);
+
 					// parameter values - fetch here to use in the background thread that updates the UI
 					Double prs = DysMain.localDB.readRealParam("percentRandom");
 					Double qome = DysMain.localDB.readRealParam("queueOpenMins");
@@ -898,7 +885,6 @@ public class MainWindowController
 					Double bspme = DysMain.localDB.readRealParam("baseSongPriceMin");
 					Double bheme = DysMain.localDB.readRealParam("baseHistoryExpireMins");
 					Double birse = DysMain.localDB.readRealParam("baseImmediateReplayScl");
-					String plrt = DysMain.localDB.readStringParam("playlistRoot");
 					Double sste = DysMain.localDB.readRealParam("skipSongTime");
 
 					// Control fields info
@@ -921,7 +907,6 @@ public class MainWindowController
 							baseSongPriceMinEntry.setText(bspme.toString());
 							baseHistoryExpireMinsEntry.setText(bheme.toString());
 							baseImmediateReplaySclEntry.setText(birse.toString());
-							playlistRootEntry.setText(plrt);
 							skipSongTimeEntry.setText(sste.toString());
 
 							// Control field values
@@ -995,7 +980,7 @@ public class MainWindowController
 					Double d_bspme = new Double(0);
 					Double d_bheme = new Double(0);
 					Double d_birse = new Double(0);
-					
+
 					try { d_qome = Double.parseDouble(qome); } catch(NumberFormatException e) {}
 					try { d_qcme = Double.parseDouble(qcme); } catch(NumberFormatException e) {}
 					try { d_ssce = Double.parseDouble(ssce); } catch(NumberFormatException e) {}
@@ -1004,8 +989,8 @@ public class MainWindowController
 					try { d_bspme = Double.parseDouble(bspme); } catch(NumberFormatException e) {}
 					try { d_bheme = Double.parseDouble(bheme); } catch(NumberFormatException e) {}
 					try { d_birse = Double.parseDouble(birse); } catch(NumberFormatException e) {}
-					
-					
+
+
 					DysMain.localDB.writeParam("percentRandom", prs);
 					DysMain.localDB.writeParam("queueOpenMins", d_qome);
 					DysMain.localDB.writeParam("queueCloseMins", d_qcme);
@@ -1015,7 +1000,7 @@ public class MainWindowController
 					DysMain.localDB.writeParam("baseSongPriceMin", d_bspme);
 					DysMain.localDB.writeParam("baseHistoryExpireMins", d_bheme);
 					DysMain.localDB.writeParam("baseImmediateReplayScl", d_birse);
-					
+
 					// push changes
 					DysMain.localDB.upSync(DysMain.remoteDB, RCTables.paramTable, false);
 
@@ -1242,11 +1227,6 @@ public class MainWindowController
 		baseImmediateReplaySclEntry.focusedProperty().addListener((arg0, oldVal, newVal) -> { 
 			if(oldVal.booleanValue())
 				baseImmediateReplaySclOnAction(null); 
-		});
-
-		playlistRootEntry.focusedProperty().addListener((arg0, oldVal, newVal) -> { 
-			if(oldVal.booleanValue())
-				playlistRootOnAction(null); 
 		});
 
 		skipSongTimeEntry.focusedProperty().addListener((arg0, oldVal, newVal) -> { 

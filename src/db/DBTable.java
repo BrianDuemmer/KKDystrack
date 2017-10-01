@@ -81,12 +81,8 @@ public class DBTable
 	
 	public void dropIfExist(DatabaseIO db)
 	{
-		String sql = "DROP TABLE ?;";
 		try {
-			PreparedStatement ps = db.getDb().prepareStatement(sql);
-			ps.setString(1, getName());
-			db.execRaw(ps);
-			ps.close();
+			db.execRaw("DROP TABLE " +getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

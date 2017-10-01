@@ -9,6 +9,7 @@ import java.util.concurrent.ThreadFactory;
 
 import db.DatabaseIO;
 import db.MySQLDatabaseIO;
+import db.RCTables;
 import db.SQLiteDatabaseIO;
 import foobarIO.Foobar;
 import http.ServerIO;
@@ -127,6 +128,7 @@ public class DysMain extends Application
 		// Stop all update threads, provided they aren't null
 		if(UIUpdateService != null)
 			UIUpdateService.shutdown();
+		System.exit(0);
 	}
 	
 	
