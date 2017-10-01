@@ -1105,7 +1105,7 @@ public class MainWindowController
 	 * database queries (but will run UI updates in the UI thread), so it should be called
 	 * explicitly from a background thread
 	 */
-	private void smartReadQueueToTable1()
+	private void smartReadQueueToTable()
 	{
 		ObservableList<QueueEntry> dbEntries = QueueEntry.getForwardQueue();
 
@@ -1126,7 +1126,7 @@ public class MainWindowController
 			} else // It hasn't been initialized yet, so just copy over the whole thing
 				queueEntries = dbEntries;
 
-			currentQueue.setItems(queueEntries); // commit
+			currentQueue.setItems(queueEntries); // commit 
 		});
 
 	}

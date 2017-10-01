@@ -569,6 +569,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#saveParams" text="Save Params" />
                         <MenuItem mnemonicParsing="false" onAction="#revertParams" text="Load Params" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Settings..." />
                   </items>
                 </Menu>

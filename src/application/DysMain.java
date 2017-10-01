@@ -53,6 +53,7 @@ public class DysMain extends Application
 	private static final String remoteDbPass = "foobarbaz3001";
 	private static final String remoteDbHost = "dystify.com";
 	private static final String remoteDbName = "dystify_dystrack_server";
+	private static final String remoteDBArgs = "?rewriteBatchedStatements=true";
 	private static final int remoteDbPort = 3306;
 	
 	
@@ -108,8 +109,8 @@ public class DysMain extends Application
 			DysMain.databaseErrorAlert.setContentText("An error occured trying to acces the database. Check the error log for more info");
 			
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
-			Scene scene = new Scene(root,1600,800);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Scene scene = new Scene(root);
+			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("resource/KKDystrack.png")));
 			
@@ -136,10 +137,9 @@ public class DysMain extends Application
 	public static void main(String[] args) 
 	{
 		new File(appDir).mkdirs(); // verify the property app directory exists
-		//remoteDB = new SQLiteDatabaseIO(appDir +"/KKDystrack.sqlite");
 		
-		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort, "?rewriteBatchedStatements=true");
-		localDB = new SQLiteDatabaseIO(appDir + "KKDystrack.sqlite");
+		remoteDB = new MySQLDatabaseIO(remoteDbHost, remoteDbUser, remoteDbPass, remoteDbName, remoteDbPort, remoteDBArgs);
+		localDB = new SQLiteDatabaseIO(appDir + "\\KKDystrack.sqlite");
 		server = new ServerIO(SERVER_PORT);
 		
 		TimedTasks.startBuck();

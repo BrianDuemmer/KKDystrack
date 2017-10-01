@@ -151,7 +151,7 @@ public class PLGenEntryController
 						// Do it as a batch to expedite things 
 						RCTables.playlistTable.verifyExists(DysMain.remoteDB);
 						
-						// DysMain.remoteDB.getDb().setAutoCommit(false);
+						 DysMain.remoteDB.getDb().setAutoCommit(false);
 						
 						String sql = "INSERT INTO " +RCTables.playlistTable.getName()+ " (song_id, song_name, ost_name, song_length, song_franchise, song_alias) VALUES ("
 								+ "?, "
@@ -212,8 +212,8 @@ public class PLGenEntryController
 						// empty it first!
 						DysMain.remoteDB.execRaw("DELETE FROM " +RCTables.playlistTable.getName());
 						ps.executeBatch();
-//						DysMain.remoteDB.getDb().commit();
-//						DysMain.remoteDB.getDb().setAutoCommit(true);
+						DysMain.remoteDB.getDb().commit();
+						DysMain.remoteDB.getDb().setAutoCommit(true);
 
 
 						// Shutdown stuff

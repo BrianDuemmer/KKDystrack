@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.DysMain;
+import db.DatabaseIO;
 import db.RCTables;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -90,7 +91,7 @@ public class QueueEntry
 	/**
 	 * Writes this queueEntry to the forward queue in the database
 	 */
-	public void writeToDB()
+	public void writeToDB(DatabaseIO db)
 	{
 		Task<Void> tsk= new Task<Void>() {
 
@@ -109,8 +110,8 @@ public class QueueEntry
 
 				try 
 				{
-					RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
-					PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
+					RCTables.forwardQueueTable.verifyExists(db);
+					PreparedStatement ps = db.getDb().prepareStatement(sql);
 
 					// Add each value
 					ps.setString(1, vw.getUserID());
@@ -119,7 +120,7 @@ public class QueueEntry
 					ps.setString(4, song.getSongID());
 
 
-					DysMain.remoteDB.execRaw(ps); // write the statement down
+					db.execRaw(ps); // write the statement down
 					ps.close();
 					System.out.println("Wrote song \"" +song.getOstName()+ " - " +song.getSongName()+ "\" to the queue");
 				} catch (SQLException e) 
