@@ -5,9 +5,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.PropMgrController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.PropMgr">
    <children>
-      <SplitPane dividerPositions="0.7449664429530202" orientation="VERTICAL" prefHeight="402.0" prefWidth="356.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.8157894736842105" orientation="VERTICAL" prefHeight="402.0" prefWidth="356.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
@@ -23,6 +23,11 @@
                                        </VBox.margin>
                                     </Label>
                                     <Label layoutX="15.0" layoutY="19.0" text="Fussbot DB">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" top="9.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label layoutX="15.0" layoutY="50.0" text="foobar2000.exe path">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" top="9.0" />
                                        </VBox.margin>
@@ -45,6 +50,11 @@
                                           <Insets left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </TextField>
+                                    <TextField fx:id="foobarPathEntry" layoutX="15.0" layoutY="45.0">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
                                  </children>
                               </VBox>
                            </children>
@@ -53,12 +63,17 @@
                            <children>
                               <VBox layoutX="-26.0" layoutY="-38.0" prefHeight="162.0" prefWidth="74.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button fx:id="playlistRootBrowse" mnemonicParsing="false" onAction="#openBrowse" text="...">
+                                    <Button fx:id="playlistRootBrowse" mnemonicParsing="false" onAction="#playlistRootBrowseOnAction" text="...">
                                        <VBox.margin>
                                           <Insets left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="fussbotBrowse" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#openBrowse" text="...">
+                                    <Button fx:id="fussbotBrowse" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#fussbotBrowseOnAction" text="...">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="foobarBrowse" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" onAction="#foobarBrowseOnAction" text="...">
                                        <VBox.margin>
                                           <Insets left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
@@ -75,12 +90,12 @@
                <children>
                   <HBox layoutX="39.0" layoutY="-36.0" prefHeight="51.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveAction" text="Save">
+                        <Button fx:id="addToQueueBtn" mnemonicParsing="false" onAction="#addToQueueAction" text="Save">
                            <HBox.margin>
                               <Insets left="10.0" top="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancelAction" text="Cancel">
+                        <Button fx:id="selectSongFileBtn" mnemonicParsing="false" onAction="#selectSongFileOnAction" text="Cancel">
                            <HBox.margin>
                               <Insets left="10.0" top="5.0" />
                            </HBox.margin>

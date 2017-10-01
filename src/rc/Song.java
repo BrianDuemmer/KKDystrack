@@ -39,7 +39,7 @@ public class Song
 		ResultSet rs;
 
 		try {
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 
 			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
 			ps.setString(1, songID);
@@ -125,7 +125,7 @@ public class Song
 		if(this.length == 0)
 		{
 			// Extract the songID from the playlist table
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 			String sql = "SELECT song_length FROM " +RCTables.playlistTable.getName()+ " WHERE song_id = ?  COLLATE NOCASE;";
 			ResultSet rs;
 
@@ -170,7 +170,7 @@ public class Song
 		if(songID.isEmpty())
 		{
 			// Extract the songID from the playlist table
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 			String sql = "SELECT song_id FROM " +RCTables.playlistTable.getName()+ " WHERE song_name = ? COLLATE NOCASE AND ost_name = ? COLLATE NOCASE;";
 			ResultSet rs;
 
@@ -208,7 +208,7 @@ public class Song
 	 */
 	public static Song getUniformRandom()
 	{
-		RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+		RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 		String sql = "SELECT song_id FROM " +RCTables.playlistTable.getName()+ " ORDER BY RANDOM() LIMIT 1";
 		Song s = null;
 		

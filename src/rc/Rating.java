@@ -25,7 +25,7 @@ public class Rating
 	public Rating(String songID)
 	{
 		try {
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement("SELECT rating_pct, rating_num FROM " +RCTables.playlistTable.getName()+ " WHERE song_id=?;");
 			ps.setString(1, songID);
 			

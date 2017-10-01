@@ -1,7 +1,9 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Represents a table in an SQLite database
@@ -27,7 +29,7 @@ public class DBTable
 	 * this does nothing. If not, the table is created
 	 * @param remoteDB the database. If the connection is invalid, print a warning and break
 	 */
-	public void verifyExists(DatabaseIO db)
+	public void verifyExists(Connection db)
 	{
 		String sql = "";
 		
@@ -40,8 +42,7 @@ public class DBTable
 		
 		try 
 		{
-			db.verifyConnected();
-			if(db == null || !db.getDb().isValid(3)) // break if invalid or null
+			if(db == null || !db.isValid(3)) // break if invalid or null
 			{
 				System.err.println("Invalid database at verifyTable");
 				return;
@@ -53,10 +54,12 @@ public class DBTable
 				sql += ", " +cols[i];
 			
 			if(!primaryKey.trim().isEmpty()) //if the primary key isn't null, empty, or whitespace, add the primary key flag
-				sql += ", PRIMARY KEY(" +primaryKey+ ")";
+				sql += ", PRIMARY KEY('" +primaryKey+ "')";
 			
 			sql +=");"; // cap off the statement, and execute
-			db.execRaw(sql);
+			Statement s = db.createStatement();
+			s.execute(sql);
+			s.close();
 			
 		} catch (SQLException e) 
 		{
@@ -79,10 +82,14 @@ public class DBTable
 	
 	
 	
-	public void dropIfExist(DatabaseIO db)
+	public void dropIfExist(Connection db)
 	{
+		String sql = "DROP TABLE ?;";
 		try {
-			db.execRaw("DROP TABLE " +getName());
+			PreparedStatement ps = db.prepareStatement(sql);
+			ps.setString(1, getName());
+			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

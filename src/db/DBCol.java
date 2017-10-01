@@ -50,7 +50,7 @@ public class DBCol
 		
 		ret += notNull  ?  " NOT NULL" : "";
 		ret += unique  ?  " UNIQUE" : "";
-		ret += autoInc  ?  " AUTO_INCREMENT" : "";
+		ret += autoInc  ?  " AUTO INCREMENT" : "";
 		
 		
 		return ret;

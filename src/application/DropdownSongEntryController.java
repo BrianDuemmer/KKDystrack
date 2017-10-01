@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
 import rc.Song;
-import rc.viewer.Viewer;
+import rc.Viewer;
 
 
 /**
@@ -84,7 +84,7 @@ public class DropdownSongEntryController {
 		String sql = "SELECT song_name FROM " +RCTables.playlistTable.getName()+ " WHERE ost_name = ?";
 
 		Thread t = new Thread(() -> {
-			RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+			RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 
 			try { // Read the database values, warn on error
 				PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
@@ -133,7 +133,7 @@ public class DropdownSongEntryController {
 			else { // we have a valid playlist entry selected ready to add. we can also safely close the window
 				Rating r = new Rating(s.getSongID());
 
-				QueueEntry q = /*new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, r, s);*/null;
+				QueueEntry q = new QueueEntry(Viewer.dysbot, System.currentTimeMillis() / 1000L, r, s);
 				q.setPriority(new Integer(priority.getText()));
 				q.writeToDB();
 
@@ -203,7 +203,7 @@ public class DropdownSongEntryController {
 				ArrayList<String> osts = new ArrayList<String>();
 				try {
 					// get a 1-column list containing all unique, non null/empty OSTs
-					RCTables.playlistTable.verifyExists(DysMain.remoteDB);
+					RCTables.playlistTable.verifyExists(DysMain.remoteDB.getDb());
 					String sql = "SELECT DISTINCT ost_name FROM " +RCTables.playlistTable.getName() +" WHERE ost_name IS NOT NULL AND NOT ost_name = '';";
 					ResultSet rs = DysMain.remoteDB.execRaw(sql);
 

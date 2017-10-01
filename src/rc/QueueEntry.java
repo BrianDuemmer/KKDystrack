@@ -11,8 +11,6 @@ import db.RCTables;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import rc.viewer.Viewer;
-import rc.viewer.ViewerFactory;
 
 /**
  * Represents a single song in the forward queue
@@ -24,6 +22,7 @@ public class QueueEntry
 	// User metrics
 	private Viewer vw;
 	private long time;
+	private Rating rating;
 	private Song song;
 	private int priority;
 
@@ -31,10 +30,11 @@ public class QueueEntry
 
 
 
-	public QueueEntry(Viewer vw, long time, Song song) 
+	public QueueEntry(Viewer vw, long time, Rating rating, Song song) 
 	{
 		this.vw = vw;
 		this.time  = time;
+		this.rating  = rating;
 		this.song = song;
 	}
 
@@ -49,30 +49,34 @@ public class QueueEntry
 
 		try 
 		{
-			// downsync from the remote database
-			DysMain.remoteDB.upSync(DysMain.localDB, RCTables.forwardQueueTable, true);
-			
 			// just dump the whole table
-			ResultSet rs = DysMain.localDB.execRaw("SELECT * FROM " +RCTables.forwardQueueTable.getName()+ ";");
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
+			ResultSet rs = DysMain.remoteDB.execRaw("SELECT * FROM " +RCTables.forwardQueueTable.getName()+ ";");
 
 			while(rs.next()) // read each table entry seperately and dump it into the QueueEntry
 			{
+				String username = rs.getString("username");
 				String user_id = rs.getString("user_id");
-				String song_id = rs.getString("song_id");
+				String song_name = rs.getString("song_name");
+				String ost_name = rs.getString("ost_name");
+				String franchise_name = rs.getString("franchise_name");
 				long time_requested = rs.getLong("time_requested");
+				int length = rs.getInt("length");
+				int rating_num = rs.getInt("rating_num");
+				double rating_pct = rs.getDouble("rating_pct");
 				int priority = rs.getInt("priority");
 
 				// format into QE
-//				QueueEntry e = new QueueEntry(
-//						new Viewer(user_id, username), 
-//						time_requested, 
-//						new Rating(rating_num, rating_pct), 
-//						new Song(song_name, ost_name, length, franchise_name)
-//						);
-//
-//				e.setPriority(priority);
-//
-//				entries.add(e);
+				QueueEntry e = new QueueEntry(
+						new Viewer(user_id, username), 
+						time_requested, 
+						new Rating(rating_num, rating_pct), 
+						new Song(song_name, ost_name, length, franchise_name)
+						);
+
+				e.setPriority(priority);
+
+				entries.add(e);
 			}
 
 			rs.close();
@@ -99,24 +103,38 @@ public class QueueEntry
 			{
 				// setup insert / field names
 				String sql = "INSERT INTO " +RCTables.forwardQueueTable.getName()+ " ("
+						+ "username, "
 						+ "user_id, "
+						+ "song_name, "
+						+ "ost_name, "
+						+ "franchise_name, "
+						+ "rating_pct, "
+						+ "rating_num, "
 						+ "time_requested, "
+						+ "length, "
 						+ "priority, "
 						+ "song_id) ";
 
 				// Add values clause, build prepared statement
-				sql += "VALUES (?, ?, ?, ?)";
+				sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 				try 
 				{
-					RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
+					RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
 					PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
 
 					// Add each value
-					ps.setString(1, vw.getUserID());
-					ps.setLong(2, time);
-					ps.setInt(3, priority);
-					ps.setString(4, song.getSongID());
+					ps.setString(1, vw.getUsername());
+					ps.setString(2, vw.getUserID());
+					ps.setString(3, song.getSongName());
+					ps.setString(4, song.getOstName());
+					ps.setString(5, song.getFranchiseName());
+					ps.setDouble(6, rating.getPct());
+					ps.setInt(7, rating.getNum());
+					ps.setLong(8, time);
+					ps.setDouble(9, song.getLength());
+					ps.setInt(10, priority);
+					ps.setString(11, song.getSongID());
 
 
 					DysMain.remoteDB.execRaw(ps); // write the statement down
@@ -146,8 +164,9 @@ public class QueueEntry
 	public static QueueEntry uniformRandomEntry()
 	{
 		Song song = Song.getUniformRandom();
+		Rating r = new Rating(song.getSongID());
 
-		QueueEntry q = new QueueEntry(ViewerFactory.RNGsus, System.currentTimeMillis() / 1000L, song);
+		QueueEntry q = new QueueEntry(Viewer.RNGsus, System.currentTimeMillis() / 1000L, r, song);
 		return q;
 	}
 
@@ -194,7 +213,7 @@ public class QueueEntry
 
 
 			// Now format the add
-			RCTables.queueHistoryTable.verifyExists(DysMain.remoteDB);
+			RCTables.queueHistoryTable.verifyExists(DysMain.remoteDB.getDb());
 			String sqlIns = "INSERT INTO " +RCTables.queueHistoryTable.getName()+ " ("
 					+ "username, "
 					+ "user_id, "
@@ -219,8 +238,8 @@ public class QueueEntry
 			psIns.setString(4, song.getSongName());
 			psIns.setString(5, song.getOstName());
 			psIns.setString(6, song.getFranchiseName());
-//			psIns.setDouble(7, rating.getPct());
-//			psIns.setInt(8, rating.getNum());
+			psIns.setDouble(7, rating.getPct());
+			psIns.setInt(8, rating.getNum());
 			psIns.setDouble(9, song.getLength());
 			psIns.setString(10, song.getSongID());
 			psIns.setInt(11, this.priority);
@@ -244,7 +263,7 @@ public class QueueEntry
 	public void deleteFromForwardQueue()
 	{
 		try {
-			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB);
+			RCTables.forwardQueueTable.verifyExists(DysMain.remoteDB.getDb());
 			String sql = "DELETE FROM " +RCTables.forwardQueueTable.getName()+ " WHERE song_id=? AND time_requested=? AND user_ID =?;";
 
 			PreparedStatement ps = DysMain.remoteDB.getDb().prepareStatement(sql);
@@ -288,13 +307,13 @@ public class QueueEntry
 
 
 	public Rating getRating() {
-		return /*rating;*/null;
+		return rating;
 	}
 
 
 
 	public void setRating(Rating rating) {
-		//this.rating = rating;
+		this.rating = rating;
 	}
 
 

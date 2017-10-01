@@ -147,8 +147,9 @@ public class PLGenEntryController
 			@Override protected Void call() throws Exception 
 			{
 				try {
+
 					// read playlist root, make sure it is valid
-					String rootPath = DysMain.localDB.readStringParam("playlistRoot");
+					String rootPath = DysMain.db.readStringParam("playlistRoot");
 					File root = new File(rootPath);
 
 					if(!rootPath.isEmpty() && root.isDirectory()) { // only go if it's valid
