@@ -24,7 +24,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
-import rc.Song;
+import rc.queue.Song;
 import rc.viewer.Viewer;
 
 /**

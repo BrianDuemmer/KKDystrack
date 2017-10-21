@@ -56,7 +56,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.RequestControl;
-import rc.Song;
+import rc.queue.Song;
 import util.TextAreaOutputStream;
 import util.TimedTasks;
 import util.Util;

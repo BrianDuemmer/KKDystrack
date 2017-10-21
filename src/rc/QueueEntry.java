@@ -11,6 +11,7 @@ import db.RCTables;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import rc.queue.Song;
 import rc.viewer.Viewer;
 import rc.viewer.ViewerFactory;
 
@@ -18,6 +19,7 @@ import rc.viewer.ViewerFactory;
  * Represents a single song in the forward queue
  * @author Duemmer
  *
+ *@deprecated
  */
 public class QueueEntry
 {

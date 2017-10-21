@@ -8,6 +8,7 @@ import application.DysMain;
 import db.RCTables;
 import foobarIO.Foobar;
 import javafx.scene.control.ProgressBar;
+import rc.queue.Song;
 import rc.viewer.Viewer;
 import util.ReqMode;
 

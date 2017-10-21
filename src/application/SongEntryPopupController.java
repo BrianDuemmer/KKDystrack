@@ -19,7 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import rc.QueueEntry;
 import rc.Rating;
-import rc.Song;
+import rc.queue.Song;
 import rc.viewer.Viewer;
 
 public class SongEntryPopupController {

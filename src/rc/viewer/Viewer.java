@@ -135,4 +135,81 @@ public class Viewer
 	public String getUsername() { return username; }
 	public int getRupees() { return rupees; }
 
+
+
+
+	public String getFavSong() {
+		return favSong;
+	}
+
+
+
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+
+
+
+	public boolean isBlacklisted() {
+		return isBlacklisted;
+	}
+
+
+
+
+	public double getRupeeDiscount() {
+		return rupeeDiscount;
+	}
+
+
+
+
+	public int getFreeRequests() {
+		return freeRequests;
+	}
+
+
+
+
+	public int getLoginBonusCount() {
+		return loginBonusCount;
+	}
+
+
+
+
+	public String getWatchtimeRank() {
+		return watchtimeRank;
+	}
+
+
+
+
+	public String getStaticRank() {
+		return staticRank;
+	}
+
+
+
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+
+
+
+	public Date getLastBdayWithdraw() {
+		return lastBdayWithdraw;
+	}
+
+
+
+
+	public String getSongOnHold() {
+		return songOnHold;
+	}
+
 }

@@ -1,4 +1,4 @@
-package rc;
+package rc.queue;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +10,7 @@ import db.RCTables;
 public class Song 
 {
 	private String songName = "";
+	private String songAlias = "";
 	private String ostName = "";
 	private String franchiseName = "";
 	private String songID = "";

@@ -79,13 +79,21 @@ public class DBTable
 	
 	
 	
-	public void dropIfExist(DatabaseIO db)
+	public void dropIfExist(DatabaseIO db) throws SQLException
 	{
-		try {
 			db.execRaw("DROP TABLE " +getName());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	}
+	
+	
+	
+	/**
+	 * This will make sure the table exists in the database, but it is completely empty
+	 * @param db
+	 * @throws SQLException 
+	 */
+	public void verifyEmpty(DatabaseIO db) throws SQLException {
+		verifyExists(db);
+		db.execRaw("DELETE FROM " +getName());
 	}
 
 

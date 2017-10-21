@@ -13,7 +13,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import rc.QueueEntry;
-import rc.Song;
+import rc.queue.Song;
 
 /**
  * This class does all of the interfacing with foobar2000, which is done through 
