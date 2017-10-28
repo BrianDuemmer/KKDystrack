@@ -1,5 +1,11 @@
-<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <eclipse-userlibraries version="2">
+    <library name="gson" systemlibrary="false">
+        <archive javadoc="jar:file:/C:/lib/gson-2.6.2/gson-2.6.2-javadoc.jar!/" path="C:/lib/gson-2.6.2/gson-2.6.2.jar" source="C:/lib/gson-2.6.2/gson-2.6.2-sources.jar"/>
+    </library>
+    <library name="jaudiotagger" systemlibrary="false">
+        <archive javadoc="jar:file:/C:/lib/jaudiotagger/jaudiotagger-2.2.3-javadoc.jar!/" path="C:/lib/jaudiotagger/jaudiotagger-2.2.3.jar" source="C:/lib/jaudiotagger/jaudiotagger-2.2.3-sources.jar"/>
+    </library>
     <library name="jid3lib" systemlibrary="false">
         <archive path="C:/lib/jid3lib-0.5.4/jid3lib-0.5.4.jar" source="C:/lib/jid3lib-0.5.4/src"/>
     </library>
@@ -8,8 +14,11 @@
         <archive path="C:/lib/tritonus_share-0.3.6.jar"/>
         <archive javadoc="file:/C:/lib/JLayer1.0.1/doc/" path="C:/lib/JLayer1.0.1/jl1.0.1.jar" source="C:/lib/JLayer1.0.1/src"/>
     </library>
+    <library name="mysql-jdbc" systemlibrary="false">
+        <archive path="C:/lib/mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar" source="C:/lib/mysql-connector-java-5.1.44/src"/>
+    </library>
     <library name="nanohttpd" systemlibrary="false">
-        <archive path="C:/lib/nanohttpd-2.3.1/nanohttpd-webserver-2.1.1.jar"/>
+        <archive path="C:/lib/nanohttpd-2.3.1/nanohttpd-webserver-2.1.1.jar" source="C:/lib/nanohttpd-2.3.1/src"/>
     </library>
     <library name="sqlite-jdbc" systemlibrary="false">
         <archive path="C:/lib/sqlite-jdbc-3.20.0.jar"/>
